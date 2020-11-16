@@ -9,7 +9,8 @@
   "private": true,
   "scripts": {
     "start": "nodemon -r dotenv/config ./src/index.ts",
-    "build": "node ./scripts/build.js"
+    "build": "node ./scripts/build.js",
+    "format": "yarn prettier --write --ignore-unknown ."
   },
   "dependencies": {
     "express": "^4.17.1",
