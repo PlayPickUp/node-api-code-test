@@ -4,6 +4,9 @@ import props from '../controllers/props-ctrl';
 const router = express.Router();
 
 router.get('/', (req: Request, res: Response) => res.sendStatus(403));
-router.get('/props', (req: Request, res: Response) => props(req, res));
+router.get(
+  '/props',
+  async (req: Request, res: Response) => await props(req, res)
+);
 
 export default router;
