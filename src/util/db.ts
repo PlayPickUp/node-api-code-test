@@ -12,7 +12,7 @@ const knex = require('knex')({
   client: 'pg',
   connection: DB,
   debug: NODE_ENV === 'development',
-  ssl: { rejectUnauthorized: false },
+  ssl: { sslmode: 'require', rejectUnauthorized: false },
 });
 
 export default knex;
