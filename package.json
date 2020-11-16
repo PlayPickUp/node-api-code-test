@@ -8,7 +8,8 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start": "nodemon -r dotenv/config ./src/index.ts"
+    "start": "nodemon -r dotenv/config ./src/index.ts",
+    "build": "node ./scripts/build.js"
   },
   "dependencies": {
     "express": "^4.17.1",
