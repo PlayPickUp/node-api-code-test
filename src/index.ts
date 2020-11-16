@@ -3,11 +3,6 @@ import apiRouter from './routes/api';
 
 const app = express();
 const port = process.env.PORT || 3000;
-const NODE_ENV = process.env.NODE_ENV;
-
-app.get('/', (req: Request, res: Response) => {
-  res.send(`Hello World! - ${NODE_ENV}`);
-});
 
 app.use('/api/v1', apiRouter);
 
