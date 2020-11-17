@@ -1,5 +1,7 @@
 const Bundler = require('parcel-bundler');
-const Path = require('path');
+const path = require('path');
+const chalk = require('chalk');
+const fs = require('fs-extra');
 
 const entryFiles = './src/index.ts';
 
@@ -28,5 +30,16 @@ const options = {
 
 (async function () {
   const bundler = new Bundler(entryFiles, options);
-  const bundle = await bundler.bundle();
+  await bundler.bundle();
+  console.log(chalk.yellow('🚧   Moving some files around...'));
+  try {
+    fs.copy(
+      path.join(__dirname, '..', 'src/public'),
+      path.join(__dirname, '..', 'dist/public')
+    ).then(() =>
+      console.log(chalk.green('✅   Copied Express folders successfully!'))
+    );
+  } catch (err) {
+    console.error(chalk.red(`🚨  Something went wrong: ${err}`));
+  }
 })();
