@@ -1,5 +1,7 @@
 # pickup-node-api
 
+![Build](https://github.com/PlayPickUp/pickup-node-api/workflows/Build/badge.svg?branch=master)
+
 ## Props
 
 ### GET `/api/v1/props`
