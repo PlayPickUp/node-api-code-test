@@ -10,7 +10,9 @@
   "scripts": {
     "start": "nodemon -r dotenv/config ./src/index.ts",
     "build": "node ./scripts/build.js",
-    "format": "yarn prettier --write --ignore-unknown ."
+    "format": "yarn prettier --write --ignore-unknown .",
+    "lint": "eslint .",
+    "test": "yarn lint"
   },
   "dependencies": {
     "chalk": "^4.1.0",
