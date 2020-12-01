@@ -1,6 +1,6 @@
 import * as pg from 'pg';
 
-const DB = process.env.DATABASE_URL;
+const DB = process.env.NODE_READ_ONLY_URL;
 const NODE_ENV = process.env.NODE_ENV;
 
 pg.defaults.ssl = {
