@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import { getProps } from '../ctx/props';
+import { generateEmail } from '../crons/checkClosingProps';
+import { getClosingProps, getProps } from '../ctx/props';
 
-const props = async (req: Request, res: Response): Promise<Response> => {
+export const props = async (req: Request, res: Response): Promise<Response> => {
   if (req.method === 'GET') {
     const limit = req.query.limit as string;
     const offset = req.query.offset as string;
@@ -14,4 +15,15 @@ const props = async (req: Request, res: Response): Promise<Response> => {
   }
 };
 
-export default props;
+export const closingProps = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const email = req.query.email as string;
+  if (email) {
+    console.log('API hit with generate email param...');
+    generateEmail();
+  }
+  const props = await getClosingProps();
+  return res.json(props);
+};

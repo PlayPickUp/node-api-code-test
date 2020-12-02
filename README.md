@@ -20,3 +20,19 @@
 # Single Prop (id: 2006)
 /api/v1/props?id=2006
 ```
+
+### GET `/api/v1/props/closing`
+
+`getClosingProps()` Returns props that are closing within the next 48 hours
+
+## Params: `email` (boolean)
+
+- email - passing `email=true` triggers a one off Daily Props Digest email
+
+```sh
+# Default - no email param, returns all props that match the criteria
+/api/v1/props/closing
+
+# Generate Email with request
+/api/v1/props/closing?email=true
+```

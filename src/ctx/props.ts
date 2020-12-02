@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import { Prop } from '../types';
 import knex from '../util/db';
 
@@ -32,5 +34,21 @@ export const getProps = async (
     } catch (err) {
       console.error(err);
     }
+  }
+};
+
+// Props Closing within 48 Hours
+export const getClosingProps = async (): Promise<Prop[] | void> => {
+  const now = moment().format('X');
+  const cap = moment().hours(48).format('X');
+  try {
+    const props: Prop[] = await knex
+      .select()
+      .from('props')
+      .whereNotNull('close_time')
+      .whereBetween('close_time', [now, cap]);
+    return props;
+  } catch (err) {
+    console.error(err);
   }
 };
