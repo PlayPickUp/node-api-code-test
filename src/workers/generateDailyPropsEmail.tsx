@@ -1,4 +1,3 @@
-import { CronJob } from 'cron';
 import sgMail from '@sendgrid/mail';
 import moment from 'moment';
 import React from 'react';
@@ -15,7 +14,7 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 
 const today = moment().format('ddd, MMM Do');
 
-export const generateEmail = async (): Promise<void> => {
+const generateDailyPropsEmail = async (): Promise<void> => {
   const props = await getClosingProps();
 
   const body = ReactDOMServer.renderToStaticMarkup(
@@ -40,20 +39,4 @@ export const generateEmail = async (): Promise<void> => {
   }
 };
 
-export const checkClosingProps = new CronJob(
-  '0 4 * * *', // every day at 4AM EST
-  async () => {
-    console.log('Gathering props that are closing in the next 48 hours...');
-
-    // TODO: Make a switch for this to only run on PROD to elim email sends from staging
-    try {
-      await generateEmail();
-      console.log('Finished gathering props. Props have been digested!');
-    } catch (error) {
-      console.error(error);
-    }
-  },
-  null,
-  true,
-  'America/New_York'
-);
+generateDailyPropsEmail();

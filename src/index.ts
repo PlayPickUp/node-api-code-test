@@ -4,7 +4,6 @@ import favicon from 'serve-favicon';
 import path from 'path';
 
 import apiRouter from './routes/api';
-import { checkClosingProps } from './crons/checkClosingProps';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,9 +12,6 @@ const port = process.env.PORT || 3000;
 app.use(helmet());
 app.use(express.static('public'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-
-// crons
-checkClosingProps.start();
 
 // api routes
 app.use('/api/v1', apiRouter);

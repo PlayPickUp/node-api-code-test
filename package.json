@@ -9,20 +9,24 @@
   "private": true,
   "scripts": {
     "start": "nodemon -e ts,json,tsx -r dotenv/config ./src/index.ts",
-    "build": "node ./scripts/build.js",
+    "build": "yarn clean && yarn build:express && yarn build:workers",
+    "build:express": "node ./scripts/build.js",
+    "build:workers": "node ./scripts/build-workers.js",
+    "clean": "node ./scripts/clean.js",
     "format": "yarn prettier --write --ignore-unknown .",
     "lint": "eslint .",
-    "test": "yarn lint"
+    "tsc": "tsc -p ./tsconfig.json",
+    "test": "yarn lint && yarn tsc"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
     "chalk": "^4.1.0",
-    "cron": "^1.8.2",
     "express": "^4.17.1",
     "fs-extra": "^9.0.1",
     "helmet": "^4.2.0",
     "juice": "^7.0.0",
     "knex": "^0.21.12",
+    "moment": "^2.29.1",
     "parcel-bundler": "^1.12.4",
     "pg": "^8.5.1",
     "react": "^17.0.1",
@@ -30,7 +34,6 @@
     "serve-favicon": "^2.5.0"
   },
   "devDependencies": {
-    "@types/cron": "^1.7.2",
     "@types/express": "^4.17.9",
     "@types/pg": "^7.14.6",
     "@types/react": "^17.0.0",
@@ -38,6 +41,7 @@
     "@types/serve-favicon": "^2.5.1",
     "@typescript-eslint/eslint-plugin": "^4.7.0",
     "@typescript-eslint/parser": "^4.7.0",
+    "del": "^6.0.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.13.0",
     "eslint-plugin-react": "^7.21.5",

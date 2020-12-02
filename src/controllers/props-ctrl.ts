@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { generateEmail } from '../crons/checkClosingProps';
 import { getClosingProps, getProps } from '../ctx/props';
 
 export const props = async (req: Request, res: Response): Promise<Response> => {
@@ -19,11 +18,6 @@ export const closingProps = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const email = req.query.email as string;
-  if (email) {
-    console.log('API hit with generate email param...');
-    generateEmail();
-  }
   const props = await getClosingProps();
   return res.json(props);
 };

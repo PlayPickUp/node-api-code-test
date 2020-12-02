@@ -2,6 +2,8 @@
 
 ![Build](https://github.com/PlayPickUp/pickup-node-api/workflows/Build/badge.svg?branch=master)
 
+> ### ⚠ Note: All routes are currently disabled
+
 ## Props
 
 ### GET `/api/v1/props`
@@ -25,14 +27,9 @@
 
 `getClosingProps()` Returns props that are closing within the next 48 hours
 
-## Params: `email` (boolean)
-
-- email - passing `email=true` triggers a one off Daily Props Digest email
+## Params: none
 
 ```sh
-# Default - no email param, returns all props that match the criteria
+# Default - returns all props closing within 48 hours
 /api/v1/props/closing
-
-# Generate Email with request
-/api/v1/props/closing?email=true
 ```
