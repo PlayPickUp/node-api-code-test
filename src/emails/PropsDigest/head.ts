@@ -132,7 +132,7 @@ export const head = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     <tbody>
       <tr>
         <td style="font-size:6px; line-height:10px; padding:0px 0px 0px 0px;" valign="top" align="center">
-          <img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px; max-width:100% !important; width:100%; height:auto !important;" width="600" alt="" data-proportionally-constrained="true" data-responsive="true" src="http://cdn.mcauto-images-production.sendgrid.net/61abc6a7f0b5a868/57957e2b-1e31-4045-9b2e-ef303b38ed52/1920x600.png">
+          <img class="max-width" border="0" style="display:block; color:#000000; text-decoration:none; font-family:Helvetica, arial, sans-serif; font-size:16px; max-width:50% !important; width:50%; height:auto !important;" width="300" alt="" data-proportionally-constrained="true" data-responsive="true" src="http://cdn.mcauto-images-production.sendgrid.net/61abc6a7f0b5a868/57957e2b-1e31-4045-9b2e-ef303b38ed52/1920x600.png">
         </td>
       </tr>
     </tbody>
@@ -140,10 +140,10 @@ export const head = `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "h
     <tbody>
       <tr>
         <td style="padding:0px 10px 0px 10px;" role="module-content" height="100%" valign="top" bgcolor="">
-          <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" height="5px" style="line-height:5px; font-size:5px;">
+          <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" height="3px" style="line-height:3px; font-size:3px;">
             <tbody>
               <tr>
-                <td style="padding:0px 0px 5px 0px;" bgcolor="#000000"></td>
+                <td style="padding:0px 0px 3px 0px;" bgcolor="#000000"></td>
               </tr>
             </tbody>
           </table>

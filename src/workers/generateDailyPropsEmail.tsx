@@ -9,6 +9,7 @@ import { head } from '../emails/PropsDigest/head';
 import { footer } from '../emails/PropsDigest/footer';
 import PropsDigest from '../emails/PropsDigest';
 
+const PROPS_DIGEST_SEND_TO = process.env.PROPS_DIGEST_SEND_TO;
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || '';
 sgMail.setApiKey(SENDGRID_API_KEY);
 
@@ -25,7 +26,7 @@ const generateDailyPropsEmail = async (): Promise<void> => {
   const html = head + parsedBody + footer;
 
   const msg = {
-    to: 'content@playpickup.com',
+    to: PROPS_DIGEST_SEND_TO,
     from: 'eric@playpickup.com',
     subject: `Daily Props Digest for ${today}`,
     html,
@@ -34,8 +35,10 @@ const generateDailyPropsEmail = async (): Promise<void> => {
   try {
     await sgMail.send(msg);
     console.log('Successfully generated and sent props digest!');
+    process.exit(0);
   } catch (error) {
     console.error(error);
+    process.exit(1);
   }
 };
 
