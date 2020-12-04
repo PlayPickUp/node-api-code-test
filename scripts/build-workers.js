@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const Bundler = require('parcel-bundler');
-const path = require('path');
 const chalk = require('chalk');
-const fs = require('fs-extra');
 
-const entryFiles = './src/index.ts';
+const entryFiles = ['./src/workers/*.tsx', './src/workers/*.ts'];
 
 // Bundler options
 const options = {
-  outDir: './dist', // The out directory to put the build files in, defaults to dist
-  outFile: 'index.js', // The name of the outputFile
+  outDir: './dist/workers', // The out directory to put the build files in, defaults to dist
+  // outFile: 'index.js', // The name of the outputFile
   publicUrl: '/', // The url to serve on, defaults to '/'
   watch: false, // Whether to watch the files and rebuild them on change, defaults to process.env.NODE_ENV !== 'production'
   cache: false, // Enabled or disables caching, defaults to true
@@ -31,17 +29,7 @@ const options = {
 };
 
 (async function () {
+  console.log(chalk.yellow('🏗   Building workers...'));
   const bundler = new Bundler(entryFiles, options);
   await bundler.bundle();
-  console.log(chalk.yellow('🚧   Moving some files around...'));
-  try {
-    fs.copy(
-      path.join(__dirname, '..', 'src/public'),
-      path.join(__dirname, '..', 'dist/public')
-    ).then(() =>
-      console.log(chalk.green('✅   Copied Express folders successfully!'))
-    );
-  } catch (err) {
-    console.error(chalk.red(`🚨  Something went wrong: ${err}`));
-  }
 })();

@@ -22,4 +22,5 @@ export interface Prop {
   publisher_id: string | null;
   meta_source: unknown;
   slug: string;
+  proposition: string;
 }
