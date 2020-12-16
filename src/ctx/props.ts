@@ -46,7 +46,11 @@ export const getClosingProps = async (): Promise<Prop[] | void> => {
       .select()
       .from('props')
       .whereNotNull('close_time')
-      .whereBetween('close_time', [now, cap]);
+      .whereBetween('close_time', [now, cap])
+      .catch((err: any) => {
+        throw new Error(err);
+      });
+
     return props;
   } catch (err) {
     console.error(err);
