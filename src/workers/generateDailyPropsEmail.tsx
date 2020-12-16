@@ -8,6 +8,7 @@ import { getClosingProps } from '../ctx/props';
 import { head } from '../emails/PropsDigest/head';
 import { footer } from '../emails/PropsDigest/footer';
 import PropsDigest from '../emails/PropsDigest';
+import { epochNow, epochNowPlus48 } from '../util/epochConverts';
 
 const PROPS_DIGEST_SEND_TO = process.env.PROPS_DIGEST_SEND_TO;
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || '';
@@ -17,6 +18,13 @@ const today = moment().format('ddd, MMM Do');
 
 const generateDailyPropsEmail = async (): Promise<void> => {
   const props = await getClosingProps();
+
+  // get and log times for props we are checking
+  const now = epochNow;
+  const cap = epochNowPlus48;
+  console.log(
+    `[Daily Props Digest]: Capturing closing props between ${now} - ${cap}`
+  );
 
   const body = ReactDOMServer.renderToStaticMarkup(
     <PropsDigest propositions={props || []} />
