@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import { Prop } from '../../types';
 
 interface PropsDigestProps {
@@ -14,9 +14,9 @@ const PropsDigest: React.FC<PropsDigestProps> = ({ propositions }) => {
           <div key={item.id}>
             <p>
               <b>{item.id}</b> - {item.proposition} ||{' '}
-              {moment(Number(item.close_time)).format(
-                'dddd, MMMM Do, h:mm:ss a'
-              )}
+              {moment(Number(item.close_time), 'X')
+                .tz('America/New_York')
+                .format('dddd, MMM Do, h:mm a z')}
             </p>
           </div>
         ))
