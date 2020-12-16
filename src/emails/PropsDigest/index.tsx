@@ -15,7 +15,7 @@ const PropsDigest: React.FC<PropsDigestProps> = ({ propositions }) => {
             <p>
               <b>{item.id}</b> - {item.proposition} ||{' '}
               {moment(Number(item.close_time)).format(
-                'dddd, MMMM Do YYYY, h:mm:ss a'
+                'dddd, MMMM Do, h:mm:ss a'
               )}
             </p>
           </div>

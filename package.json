@@ -16,7 +16,8 @@
     "format": "yarn prettier --write --ignore-unknown .",
     "lint": "eslint .",
     "tsc": "tsc -p ./tsconfig.json",
-    "test": "yarn lint && yarn tsc"
+    "test": "yarn lint && yarn tsc",
+    "workers:generateDailyProps": "yarn build:workers && nodemon -r dotenv/config ./dist/workers/generateDailyPropsEmail.js"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
@@ -27,6 +28,7 @@
     "juice": "^7.0.0",
     "knex": "^0.21.12",
     "moment": "^2.29.1",
+    "moment-timezone": "^0.5.32",
     "parcel-bundler": "^1.12.4",
     "pg": "^8.5.1",
     "react": "^17.0.1",
