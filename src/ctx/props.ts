@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 
 import { Prop } from '../types';
 import knex from '../util/db';
@@ -39,8 +39,8 @@ export const getProps = async (
 
 // Props Closing within 48 Hours
 export const getClosingProps = async (): Promise<Prop[] | void> => {
-  const now = moment().format('X');
-  const cap = moment().hours(48).format('X');
+  const now = moment().tz('America/New_York').format('X');
+  const cap = moment().tz('America/New_York').hours(62).format('X'); // 48 hours out
   try {
     const props: Prop[] = await knex
       .select()
