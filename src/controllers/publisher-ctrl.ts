@@ -6,7 +6,7 @@ export const sendDemoRequest = async (
   res: Response
 ): Promise<Response | void> => {
   try {
-    const publisherEmail = req.query.publisherEmail as string;
+    const { publisherEmail } = req.body;
     const response = await deliverDemo(publisherEmail);
     if (!response) {
       throw new Error('Could not send publisher demo email!');
