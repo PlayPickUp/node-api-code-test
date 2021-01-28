@@ -14,7 +14,7 @@ app.use(express.static('public'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 // api routes
-app.use('/api/v1', apiRouter);
+app.use('/v1', apiRouter);
 
 // health check
 app.get('/health', (req: Request, res: Response) => res.sendStatus(200));
