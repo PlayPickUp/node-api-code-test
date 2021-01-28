@@ -10,6 +10,8 @@ const port = process.env.PORT || 3001;
 
 // various configs/use
 app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
