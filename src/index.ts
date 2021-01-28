@@ -12,7 +12,7 @@ const port = process.env.PORT || 3001;
 // various configs/use
 const corsConfig: CorsOptions = {
   origin: [
-    'http://localhost',
+    'http://localhost:3000',
     'https://www.playpickup.com',
     'https://p.pckp.io',
     'https://staging.playpickup.com',
