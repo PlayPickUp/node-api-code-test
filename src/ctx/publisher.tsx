@@ -3,7 +3,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import juice from 'juice';
 
-import { head } from '../emails/PropsDigest/head';
+import { head } from '../emails/PublisherDemo/head';
 import { footer } from '../emails/PropsDigest/footer';
 import PublisherDemo from '../emails/PublisherDemo';
 

@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import cors, { CorsOptions } from 'cors';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
 import path from 'path';
@@ -9,6 +10,17 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 // various configs/use
+const corsConfig: CorsOptions = {
+  origin: [
+    'http://localhost',
+    'https://www.playpickup.com',
+    'https://p.pckp.io',
+    'https://staging.playpickup.com',
+    'https://s.pckp.io',
+  ],
+  optionsSuccessStatus: 200,
+};
+app.use(cors(corsConfig));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
