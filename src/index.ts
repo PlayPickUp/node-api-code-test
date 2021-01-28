@@ -6,7 +6,7 @@ import path from 'path';
 import apiRouter from './routes/api';
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 // various configs/use
 app.use(helmet());
