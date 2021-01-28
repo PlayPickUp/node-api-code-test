@@ -2,6 +2,7 @@ import sgMail from '@sendgrid/mail';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import juice from 'juice';
+import split from 'lodash/split';
 
 import { head } from '../emails/PublisherDemo/head';
 import { footer } from '../emails/PropsDigest/footer';
@@ -26,8 +27,10 @@ export const deliverDemo = async (
 
     const html = head + parsedBody + footer;
 
+    const to = split(PUBLISHER_DEMO_SEND_TO, ',');
+
     const msg = {
-      to: PUBLISHER_DEMO_SEND_TO,
+      to,
       from: 'eric@playpickup.com',
       subject: `A Publisher Wants a Demo! (${publisherEmail})`,
       html,
