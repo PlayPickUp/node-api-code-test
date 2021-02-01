@@ -20,6 +20,7 @@ const corsConfig: CorsOptions = {
   ],
   optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsConfig));
 app.use(helmet());
 app.use(express.json());
