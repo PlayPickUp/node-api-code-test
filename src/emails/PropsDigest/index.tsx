@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment-timezone';
-import { Prop } from '../../types';
+import {Prop} from "../../models/prop.interface";
 
 interface PropsDigestProps {
   propositions: Prop[];

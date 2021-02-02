@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import { closingProps, props } from '../controllers/props-ctrl';
-import { sendDemoRequest } from '../controllers/publisher-ctrl';
+import { closingProps, props } from '../controllers/props.controller';
+import { sendDemoRequest } from '../controllers/publisher.controller';
 
 const router = express.Router();
 

@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import juice from 'juice';
 
-import { getClosingProps } from '../ctx/props';
+import { getClosingProps } from '../services/props.service';
 import { head } from '../emails/PropsDigest/head';
 import { footer } from '../emails/PropsDigest/footer';
 import PropsDigest from '../emails/PropsDigest';
