@@ -6,6 +6,9 @@ import path from 'path';
 
 import propsRouter from './routes/props.routes';
 import publishersRouter from "./routes/publishers.routes";
+import {httpErrorHandler} from "./middleware/httpError.middleware";
+import {forbiddenErrorHandler} from "./middleware/forbiddenError.middleware";
+import {notFoundErrorHandler} from "./middleware/notFoundError.middleware";
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -35,6 +38,12 @@ app.use('/v1', publishersRouter);
 
 // health check
 app.get('/health', (req: Request, res: Response) => res.sendStatus(200));
+
+// error handlers
+app.use(httpErrorHandler)
+app.use(forbiddenErrorHandler)
+// 404 error handler (must be last)
+app.use(notFoundErrorHandler)
 
 app.listen(port, () => {
   console.log(`PickUp API listening on ${port}`);
