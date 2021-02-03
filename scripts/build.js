@@ -5,7 +5,7 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 
-const entryFiles = './src/index.ts';
+const entryFiles = './src/prop.model.ts';
 
 // Bundler options
 const options = {

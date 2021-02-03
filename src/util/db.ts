@@ -11,7 +11,7 @@ pg.defaults.ssl = {
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const knex = require('knex')({
   client: 'pg',
-  connection: DB_URL,
+  connection: process.env.DATABASE_FULL_ACCESS,
   debug: NODE_ENV === 'development',
   ssl: { sslmode: 'require', rejectUnauthorized: false },
 });
