@@ -23,6 +23,10 @@ paths:
           type: integer
           description: Number of props to skip over when returning props
           required: false
+        - in: header
+          name: x-PickUp-Access-Token
+          type: string
+          required: true
 
       responses:
         200:
@@ -53,17 +57,24 @@ paths:
                         type: string
                         example: "Dexter Fowler's final batting average for 2021 will be over .270"
 
-        404:
-          description: Invalid request
+        403:
+          description: Permission Denied
           schema:
             type: object
             properties:
               message:
                 type: string
-                example: 'Not found'
+                example: 'Forbidden'
+
   /props/closing:
     get:
       description: Returns a collection of props that are closing in the next 48 hours
+      parameters:
+        - in: header
+          name: x-PickUp-Access-Token
+          type: string
+          required: true
+
       responses:
         200:
           description: Successfully returned a list of props closing within 48 hours
@@ -87,14 +98,16 @@ paths:
                 updated_at:
                   type: string
                   example: '2021-01-20T01:18:12.689Z'
-        404:
-          description: Invalid Request
+
+        403:
+          description: Permission Denied
           schema:
             type: object
             properties:
               message:
                 type: string
-                example: 'Not found'
+                example: 'Forbidden'
+
   /publishers/demo:
     post:
       description: 'Sends a publisher demo request email to the content team'
@@ -179,14 +192,6 @@ paths:
                 deleted_at:
                   type: string
                   example: null
-        404:
-          description: Invalid Request
-          schema:
-            type: object
-            properties:
-              message:
-                type: string
-                example: 'Not found'
 
         403:
           description: Permission Denied
