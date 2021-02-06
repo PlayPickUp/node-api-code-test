@@ -1,4 +1,4 @@
-swagger: "2.0"
+swagger: '2.0'
 info:
   version: 0.1.0
   title: PickUp Node API
@@ -60,7 +60,7 @@ paths:
             properties:
               message:
                 type: string
-                example: "Not found"
+                example: 'Not found'
   /props/closing:
     get:
       description: Returns a collection of props that are closing in the next 48 hours
@@ -77,16 +77,16 @@ paths:
                   example: 4035
                 close_time:
                   type: string
-                  example: "2021-05-20T01:18:00.000Z"
+                  example: '2021-05-20T01:18:00.000Z'
                 proposition:
                   type: string
-                  example: "Will Steph Curry be traded?"
+                  example: 'Will Steph Curry be traded?'
                 created_at:
                   type: string
-                  example: "2021-01-20T01:18:12.689Z"
+                  example: '2021-01-20T01:18:12.689Z'
                 updated_at:
                   type: string
-                  example: "2021-01-20T01:18:12.689Z"
+                  example: '2021-01-20T01:18:12.689Z'
         404:
           description: Invalid Request
           schema:
@@ -94,10 +94,10 @@ paths:
             properties:
               message:
                 type: string
-                example: "Not found"
+                example: 'Not found'
   /publishers/demo:
     post:
-      description: "Sends a publisher demo request email to the content team"
+      description: 'Sends a publisher demo request email to the content team'
       consumes:
         - application/x-www-form-urlencoded
       parameters:
@@ -116,7 +116,7 @@ paths:
                 example: 0
   /posts:
     get:
-      description: "Returns a collection of PickUp Posts"
+      description: 'Returns a collection of PickUp Posts'
       parameters:
         - in: query
           name: limit
@@ -133,12 +133,12 @@ paths:
             type: string
           description: Returns post or posts with matching ID(s)
         - in: header
-          name: "x-PickUp-Access-Token"
+          name: 'x-PickUp-Access-Token'
           type: string
           required: true
       responses:
         200:
-          description: "Successfully returned a collection of PickUp Posts"
+          description: 'Successfully returned a collection of PickUp Posts'
           schema:
             type: array
             items:
@@ -149,7 +149,7 @@ paths:
                   example: 23
                 post_title:
                   type: string
-                  example: "Will Steph Curry be traded?"
+                  example: 'Will Steph Curry be traded?'
                 league:
                   type: array
                   items:
@@ -160,22 +160,22 @@ paths:
                   example: 4032
                 article_url:
                   type: string
-                  example: "https://nba.com/news/2020/02/14/warriors-next-moves-steph-curry"
+                  example: 'https://nba.com/news/2020/02/14/warriors-next-moves-steph-curry'
                 headline:
                   type: string
-                  example: "With a dissapointing season in the books, what are the Warriors next moves?"
+                  example: 'With a dissapointing season in the books, what are the Warriors next moves?'
                 excerpt:
                   type: string
-                  example: "The Champions no more, the Warriors are wondering where it all broke down. Despite an impressive performance from Curry the shortcommings are too blinding to ignore."
+                  example: 'The Champions no more, the Warriors are wondering where it all broke down. Despite an impressive performance from Curry the shortcommings are too blinding to ignore.'
                 featured_img:
                   type: string
-                  example: "https://aws.bucket.fake.pckp.io/posts/390382084.jpg"
+                  example: 'https://aws.bucket.fake.pckp.io/posts/390382084.jpg'
                 published_at:
                   type: string
-                  example: "2021-01-20T01:18:12.689Z"
+                  example: '2021-01-20T01:18:12.689Z'
                 updated_at:
                   type: string
-                  example: "2021-01-20T01:18:12.689Z"
+                  example: '2021-01-20T01:18:12.689Z'
                 deleted_at:
                   type: string
                   example: null
@@ -186,7 +186,7 @@ paths:
             properties:
               message:
                 type: string
-                example: "Not found"
+                example: 'Not found'
 
         403:
           description: Permission Denied
@@ -195,7 +195,7 @@ paths:
             properties:
               message:
                 type: string
-                example: "Forbidden"
+                example: 'Forbidden'
     post:
       description: Creates a PickUp Post (Currently referred to as Homebase Post)
       consumes:
@@ -236,7 +236,7 @@ paths:
           type: string
           required: true
         - in: header
-          name: "x-PickUp-Access-Token"
+          name: 'x-PickUp-Access-Token'
           type: string
           required: true
 
@@ -248,7 +248,7 @@ paths:
             properties:
               message:
                 type: string
-                example: "Created"
+                example: 'Created'
         403:
           description: Permission Denied
           schema:
@@ -256,7 +256,7 @@ paths:
             properties:
               message:
                 type: string
-                example: "Forbidden"
+                example: 'Forbidden'
 
 # Added by API Auto Mocking Plugin
 # host: api.playpickup.com
