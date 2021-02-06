@@ -1,0 +1,268 @@
+swagger: "2.0"
+info:
+  version: 0.1.0
+  title: PickUp Node API
+  description: PickUp's Node API
+paths:
+  /props:
+    get:
+      description: Returns a collection of props
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          description: ID of prop to return
+          required: false
+        - in: query
+          name: limit
+          type: integer
+          description: Set a limit to the number of props returned per page
+          required: false
+        - in: query
+          name: offset
+          type: integer
+          description: Number of props to skip over when returning props
+          required: false
+
+      responses:
+        200:
+          description: Successfully returned a list of props - THIS OUTPUT WILL CHANGE AND IS NOT SOLIDIFIED
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 3829
+                proposition:
+                  type: string
+                  example: "Fowler's Batting Average for 2021"
+                iframe_html:
+                  type: string
+                  example: '<iframe src="https://app.playpickup.com//widgets/props/4768" style="width: 352px; height: 504px; margin-bottom: 0; border: none" referrerpolicy="unsafe-url" sandbox="allow-popups allow-scripts allow-same-origin allow-forms" width="352px" height="504px" resizable></iframe>'
+                picks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 10531
+                      title:
+                        type: string
+                        example: "Dexter Fowler's final batting average for 2021 will be over .270"
+
+        404:
+          description: Invalid request
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Not found"
+  /props/closing:
+    get:
+      description: Returns a collection of props that are closing in the next 48 hours
+      responses:
+        200:
+          description: Successfully returned a list of props closing within 48 hours
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 4035
+                close_time:
+                  type: string
+                  example: "2021-05-20T01:18:00.000Z"
+                proposition:
+                  type: string
+                  example: "Will Steph Curry be traded?"
+                created_at:
+                  type: string
+                  example: "2021-01-20T01:18:12.689Z"
+                updated_at:
+                  type: string
+                  example: "2021-01-20T01:18:12.689Z"
+        404:
+          description: Invalid Request
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Not found"
+  /publishers/demo:
+    post:
+      description: "Sends a publisher demo request email to the content team"
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: publisherEmail
+          type: string
+          description: User entered email
+      responses:
+        200:
+          description: Successfully sent demo request
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 0
+  /posts:
+    get:
+      description: "Returns a collection of PickUp Posts"
+      parameters:
+        - in: query
+          name: limit
+          type: integer
+          description: Limit the number of posts to return
+        - in: query
+          name: offset
+          type: integer
+          description: Number of posts to skip over in response
+        - in: query
+          name: id
+          type: array
+          items:
+            type: string
+          description: Returns post or posts with matching ID(s)
+        - in: header
+          name: "x-PickUp-Access-Token"
+          type: string
+          required: true
+      responses:
+        200:
+          description: "Successfully returned a collection of PickUp Posts"
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 23
+                post_title:
+                  type: string
+                  example: "Will Steph Curry be traded?"
+                league:
+                  type: array
+                  items:
+                    type: string
+                    example: NBA
+                prop_id:
+                  type: integer
+                  example: 4032
+                article_url:
+                  type: string
+                  example: "https://nba.com/news/2020/02/14/warriors-next-moves-steph-curry"
+                headline:
+                  type: string
+                  example: "With a dissapointing season in the books, what are the Warriors next moves?"
+                excerpt:
+                  type: string
+                  example: "The Champions no more, the Warriors are wondering where it all broke down. Despite an impressive performance from Curry the shortcommings are too blinding to ignore."
+                featured_img:
+                  type: string
+                  example: "https://aws.bucket.fake.pckp.io/posts/390382084.jpg"
+                published_at:
+                  type: string
+                  example: "2021-01-20T01:18:12.689Z"
+                updated_at:
+                  type: string
+                  example: "2021-01-20T01:18:12.689Z"
+                deleted_at:
+                  type: string
+                  example: null
+        404:
+          description: Invalid Request
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Not found"
+
+        403:
+          description: Permission Denied
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Forbidden"
+    post:
+      description: Creates a PickUp Post (Currently referred to as Homebase Post)
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - in: formData
+          name: id
+          type: integer
+          required: true
+        - in: formData
+          name: post_title
+          type: string
+          required: true
+        - in: formData
+          name: league
+          type: array
+          required: true
+          items:
+            type: string
+        - in: formData
+          name: prop_id
+          type: integer
+          required: true
+        - in: formData
+          name: article_url
+          type: string
+          required: true
+        - in: formData
+          name: headline
+          type: string
+          required: true
+        - in: formData
+          name: excerpt
+          type: string
+          required: true
+        - in: formData
+          name: featured_img
+          type: string
+          required: true
+        - in: header
+          name: "x-PickUp-Access-Token"
+          type: string
+          required: true
+
+      responses:
+        201:
+          description: Successfully created a PickUp Post
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Created"
+        403:
+          description: Permission Denied
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: "Forbidden"
+
+# Added by API Auto Mocking Plugin
+# host: api.playpickup.com
+# basePath: /v1
+schemes:
+  - https
+# Added by API Auto Mocking Plugin
+host: virtserver.swaggerhub.com
+basePath: /stoutatpickup/pickup-node-api/0.1.0
