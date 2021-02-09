@@ -204,42 +204,38 @@ paths:
     post:
       description: Creates a PickUp Post (Currently referred to as Homebase Post)
       consumes:
-        - application/x-www-form-urlencoded
+        - application/json
       parameters:
-        - in: formData
-          name: id
-          type: integer
-          required: true
-        - in: formData
-          name: post_title
-          type: string
-          required: true
-        - in: formData
-          name: league
-          type: array
-          required: true
-          items:
-            type: string
-        - in: formData
-          name: prop_id
-          type: integer
-          required: true
-        - in: formData
-          name: article_url
-          type: string
-          required: true
-        - in: formData
-          name: headline
-          type: string
-          required: true
-        - in: formData
-          name: excerpt
-          type: string
-          required: true
-        - in: formData
-          name: featured_img
-          type: string
-          required: true
+        - in: body
+          name: post
+          description: Creates a PickUp Post with supplied properties
+          schema:
+            type: object
+            required:
+              - post_title
+              - league
+              - prop_id
+              - article_url
+              - headline
+              - excerpt
+              - featured_img
+            properties:
+              post_title:
+                type: string
+              league:
+                type: array
+                items:
+                  type: string
+              prop_id:
+                type: integer
+              article_url:
+                type: string
+              headline:
+                type: string
+              excerpt:
+                type: string
+              featured_img:
+                type: string
         - in: header
           name: 'x-PickUp-Access-Token'
           type: string

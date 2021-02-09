@@ -6,23 +6,21 @@ import path from 'path';
 
 import propsRouter from './routes/props.routes';
 import publishersRouter from './routes/publishers.routes';
+import postsRouter from './routes/posts.routes';
 import { httpErrorHandler } from './middleware/httpError.middleware';
 import { forbiddenErrorHandler } from './middleware/forbiddenError.middleware';
 import { notFoundErrorHandler } from './middleware/notFoundError.middleware';
+import { corsWhitelistDev, corsWhitelistProd } from './constants/corsWhitelist';
 
 const app = express();
 const port = process.env.PORT || 3001;
+const { NODE_ENV } = process.env;
 
 // various configs/use
 const corsConfig: CorsOptions = {
-  origin: [
-    'http://localhost:3000',
-    'https://www.playpickup.com',
-    'https://p.pckp.io',
-    'https://staging.playpickup.com',
-    'https://s.pckp.io',
-  ],
+  origin: NODE_ENV !== 'production' ? corsWhitelistDev : corsWhitelistProd,
   optionsSuccessStatus: 200,
+  credentials: true,
 };
 
 app.use(cors(corsConfig));
@@ -35,6 +33,7 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 // api routes
 app.use('/v1', propsRouter);
 app.use('/v1', publishersRouter);
+app.use('/v1', postsRouter);
 
 // health check
 app.get('/health', (req: Request, res: Response) => res.sendStatus(200));
@@ -42,6 +41,7 @@ app.get('/health', (req: Request, res: Response) => res.sendStatus(200));
 // error handlers
 app.use(httpErrorHandler);
 app.use(forbiddenErrorHandler);
+
 // 404 error handler (must be last)
 app.use(notFoundErrorHandler);
 
