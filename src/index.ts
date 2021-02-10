@@ -7,6 +7,7 @@ import path from 'path';
 import propsRouter from './routes/props.routes';
 import publishersRouter from './routes/publishers.routes';
 import postsRouter from './routes/posts.routes';
+import leaguesRouter from './routes/leagues.routes';
 import { httpErrorHandler } from './middleware/httpError.middleware';
 import { forbiddenErrorHandler } from './middleware/forbiddenError.middleware';
 import { notFoundErrorHandler } from './middleware/notFoundError.middleware';
@@ -34,6 +35,7 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use('/v1', propsRouter);
 app.use('/v1', publishersRouter);
 app.use('/v1', postsRouter);
+app.use('/v1', leaguesRouter);
 
 // health check
 app.get('/health', (req: Request, res: Response) => res.sendStatus(200));

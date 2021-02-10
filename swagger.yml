@@ -127,6 +127,32 @@ paths:
               code:
                 type: integer
                 example: 0
+
+  /leagues:
+    get:
+      description: 'Returns a collection of currently supported leagues'
+      responses:
+        200:
+          description: 'Successfully returned a collection of supported leagues'
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                value:
+                  type: string
+                  example: 'mlb'
+                label:
+                  type: string
+                  example: 'MLB'
+        403:
+          description: Permission Denied
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Forbidden'
   /posts:
     get:
       description: 'Returns a collection of PickUp Posts'
