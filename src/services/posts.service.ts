@@ -21,6 +21,7 @@ export const getPosts = async (
       const posts: Post[] = await knex
         .select('*')
         .from('posts')
+        .where({ deleted_at: null })
         .orderBy('id', 'desc')
         .limit(limit)
         .offset(offset);
