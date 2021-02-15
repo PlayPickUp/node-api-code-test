@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import { posts, create } from '../controllers/posts.controller';
+import { posts, create, update, del } from '../controllers/posts.controller';
 
 const postsRouter = express.Router();
 
@@ -12,6 +12,15 @@ postsRouter.get(
 postsRouter.post(
   '/posts',
   async (req: Request, res: Response) => await create(req, res)
+);
+postsRouter.put(
+  '/posts',
+  async (req: Request, res: Response) => await update(req, res)
+);
+
+postsRouter.delete(
+  '/posts',
+  async (req: Request, res: Response) => await del(req, res)
 );
 
 export default postsRouter;

@@ -266,7 +266,6 @@ paths:
           name: 'x-PickUp-Access-Token'
           type: string
           required: true
-
       responses:
         201:
           description: Successfully created a PickUp Post
@@ -276,6 +275,97 @@ paths:
               message:
                 type: string
                 example: 'Created'
+        403:
+          description: Permission Denied
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Forbidden'
+
+    put:
+      description: Updates an entire PickUp Post Record
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: post
+          description: Updates a PickUp Post with supplied properties
+          schema:
+            type: object
+            required:
+              - post_title
+              - league
+              - prop_id
+              - article_url
+              - headline
+              - excerpt
+              - featured_img
+            properties:
+              post_title:
+                type: string
+              league:
+                type: array
+                items:
+                  type: string
+              prop_id:
+                type: integer
+              article_url:
+                type: string
+              headline:
+                type: string
+              excerpt:
+                type: string
+              featured_img:
+                type: string
+        - in: header
+          name: 'x-PickUp-Access-Token'
+          type: string
+          required: true
+
+      responses:
+        201:
+          description: Successfully updated a PickUp Post
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Updated'
+        403:
+          description: Permission Denied
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Forbidden'
+
+    delete:
+      description: Deletes an entire PickUp Post Record
+      consumes:
+        - application/json
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          description: ID of post to delete
+          required: true
+        - in: header
+          name: 'x-PickUp-Access-Token'
+          type: string
+          required: true
+
+      responses:
+        201:
+          description: Successfully updated a PickUp Post
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Deleted'
         403:
           description: Permission Denied
           schema:
