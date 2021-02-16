@@ -1,7 +1,7 @@
-import HttpException from "./http.exception";
+import HttpException from './http.exception';
 
 export default class ForbiddenException extends HttpException {
-  statusCode: number
+  statusCode: number;
   message: string;
   error: string | null;
 

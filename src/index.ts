@@ -12,13 +12,13 @@ import { httpErrorHandler } from './middleware/httpError.middleware';
 import { forbiddenErrorHandler } from './middleware/forbiddenError.middleware';
 import { notFoundErrorHandler } from './middleware/notFoundError.middleware';
 import { corsWhitelistDev, corsWhitelistProd } from './constants/corsWhitelist';
-import loginRouter from "./routes/login.routes";
-import passport from "passport";
-import Strategy from "passport-auth-token";
-import {findPublisherByAccessToken} from "./services/publishers.service";
-import NotFoundException from "./exceptions/notFound.exception";
-import {Publisher} from "./models/publishers.model";
-import ForbiddenException from "./exceptions/forbidden.exception";
+import loginRouter from './routes/login.routes';
+import passport from 'passport';
+import Strategy from 'passport-auth-token';
+import { findPublisherByAccessToken } from './services/publishers.service';
+import NotFoundException from './exceptions/notFound.exception';
+import { Publisher } from './models/publishers.model';
+import ForbiddenException from './exceptions/forbidden.exception';
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -38,27 +38,32 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
-passport.use('publishertoken', new Strategy(
-    async function(token, done) {
-        const publisher = await findPublisherByAccessToken(token);
-        if (publisher) {
-            return done(null, publisher)
-        } else {
-            return done(new ForbiddenException("No valid publisher access token provided"))
-        }
+passport.use(
+  'publishertoken',
+  new Strategy(async function (token, done) {
+    const publisher = await findPublisherByAccessToken(token);
+    if (publisher) {
+      return done(null, publisher);
+    } else {
+      return done(
+        new ForbiddenException('No valid publisher access token provided')
+      );
     }
-));
+  })
+);
 
-passport.use('admintoken', new Strategy(
-    async function(token, done) {
-        if (token && (token === process.env.ADMIN_TOKEN)) {
-            return done(null, token)
-        } else {
-            return done(new ForbiddenException("No valid admin access token provided"))
-        }
+passport.use(
+  'admintoken',
+  new Strategy(async function (token, done) {
+    if (token && token === process.env.ADMIN_TOKEN) {
+      return done(null, token);
+    } else {
+      return done(
+        new ForbiddenException('No valid admin access token provided')
+      );
     }
-));
-
+  })
+);
 
 // api routes
 app.use('/v1', propsRouter);

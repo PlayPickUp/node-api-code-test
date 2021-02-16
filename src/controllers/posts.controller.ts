@@ -24,8 +24,8 @@ export const posts = async (req: Request, res: Response): Promise<Response> => {
 };
 
 export const create = async (
-    req: Request,
-    res: Response
+  req: Request,
+  res: Response
 ): Promise<Response> => {
   const { body } = req;
   try {
@@ -40,8 +40,8 @@ export const create = async (
 };
 
 export const update = async (
-    req: Request,
-    res: Response
+  req: Request,
+  res: Response
 ): Promise<Response> => {
   const { body } = req;
   try {
@@ -54,10 +54,7 @@ export const update = async (
   }
 };
 
-export const del = async (
-    req: Request,
-    res: Response
-): Promise<Response> => {
+export const del = async (req: Request, res: Response): Promise<Response> => {
   const {
     query: { id },
   } = req;
