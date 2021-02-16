@@ -1,5 +1,5 @@
-import express, { Request, Response } from 'express';
-import { leagues } from '../controllers/leagues.controller';
+import express, {Request, Response} from 'express';
+import {leagues} from '../controllers/leagues.controller';
 
 const leaguesRouter = express.Router();
 

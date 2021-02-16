@@ -1,5 +1,5 @@
-import express, { Request, Response } from 'express';
-import { closingProps, props } from '../controllers/props.controller';
+import express, {Request, Response} from 'express';
+import {closingProps, props} from '../controllers/props.controller';
 
 const propsRouter = express.Router();
 

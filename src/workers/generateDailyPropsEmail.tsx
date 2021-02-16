@@ -4,11 +4,11 @@ import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import juice from 'juice';
 
-import { getClosingProps } from '../services/props.service';
-import { head } from '../emails/PropsDigest/head';
-import { footer } from '../emails/PropsDigest/footer';
+import {getClosingProps} from '../services/props.service';
+import {head} from '../emails/PropsDigest/head';
+import {footer} from '../emails/PropsDigest/footer';
 import PropsDigest from '../emails/PropsDigest';
-import { epochNow, epochNowPlus48 } from '../util/epochConverts';
+import {epochNow, epochNowPlus48} from '../util/epochConverts';
 
 const PROPS_DIGEST_SEND_TO = process.env.PROPS_DIGEST_SEND_TO;
 const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || '';
