@@ -49,6 +49,16 @@ passport.use('publishertoken', new Strategy(
     }
 ));
 
+passport.use('admintoken', new Strategy(
+    async function(token, done) {
+        if (token && (token === process.env.ADMIN_TOKEN)) {
+            return done(null, token)
+        } else {
+            return done(new ForbiddenException("No valid admin access token provided"))
+        }
+    }
+));
+
 
 // api routes
 app.use('/v1', propsRouter);

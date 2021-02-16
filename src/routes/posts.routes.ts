@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { posts, create, update, del } from '../controllers/posts.controller';
+import passport from "passport";
 
 const postsRouter = express.Router();
 
@@ -11,16 +12,20 @@ postsRouter.get(
 );
 postsRouter.post(
   '/posts',
+    passport.authenticate('publishertoken', {session: false}),
   async (req: Request, res: Response) => await create(req, res)
 );
+
 postsRouter.put(
-  '/posts',
-  async (req: Request, res: Response) => await update(req, res)
+    '/posts',
+    passport.authenticate('publishertoken', {session: false}),
+    async (req: Request, res: Response) => await update(req, res)
 );
 
 postsRouter.delete(
-  '/posts',
-  async (req: Request, res: Response) => await del(req, res)
+    '/posts',
+    passport.authenticate('admintoken', {session: false}),
+    async (req: Request, res: Response) => await del(req, res)
 );
 
 export default postsRouter;
