@@ -4,16 +4,16 @@ import NotFoundException from '../exceptions/notFound.exception';
 import BadRequestException from '../exceptions/badRequest.exception';
 
 export const findPublisherByAccessToken = async (
-  token: string
+  access_token: string
 ): Promise<Publisher | void> => {
   try {
-    if (!token) {
+    if (!access_token) {
       throw new BadRequestException('Must provide a valid access token!');
     }
     const publisher: Publisher = knex
       .select()
       .from('publishers')
-      .where({ access_token: token })
+      .where({ access_token })
       .first();
     if (!publisher) {
       throw new NotFoundException(
