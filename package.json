@@ -7,6 +7,10 @@
   "author": "Eric Stout <ericwstout@gmail.com>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "14.x",
+    "yarn": "1.x"
+  },
   "scripts": {
     "start": "nodemon -e ts,json,tsx -r dotenv/config ./src/index.ts",
     "build": "yarn clean && yarn build:express && yarn build:workers",
