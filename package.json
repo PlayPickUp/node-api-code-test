@@ -17,7 +17,8 @@
     "lint": "eslint .",
     "tsc": "tsc -p ./tsconfig.json",
     "test": "yarn lint && yarn tsc",
-    "workers:generateDailyProps": "yarn build:workers && nodemon -r dotenv/config ./dist/workers/generateDailyPropsEmail.js"
+    "workers:generateDailyProps": "yarn build:workers && nodemon -r dotenv/config ./dist/workers/generateDailyPropsEmail.js",
+    "heroku-postbuild": "yarn build:express && yarn build:workers"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
