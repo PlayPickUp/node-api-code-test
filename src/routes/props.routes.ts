@@ -1,7 +1,15 @@
-import express, { Request, Response } from 'express';
+import express, { NextFunction, Request, Response } from 'express';
+import cors from 'cors';
 import { closingProps, props } from '../controllers/props.controller';
+import { publicCorsConfig } from '../util/corsOptions';
 
 const propsRouter = express.Router();
+
+propsRouter.all(
+  '*',
+  cors(publicCorsConfig),
+  (req: Request, res: Response, next: NextFunction) => next()
+);
 
 propsRouter.get('/', (req: Request, res: Response) => res.sendStatus(403));
 

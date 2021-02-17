@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import cors, { CorsOptions } from 'cors';
+import cors from 'cors';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
 import path from 'path';
@@ -11,25 +11,17 @@ import leaguesRouter from './routes/leagues.routes';
 import { httpErrorHandler } from './middleware/httpError.middleware';
 import { forbiddenErrorHandler } from './middleware/forbiddenError.middleware';
 import { notFoundErrorHandler } from './middleware/notFoundError.middleware';
-import { corsWhitelistDev, corsWhitelistProd } from './constants/corsWhitelist';
 import loginRouter from './routes/login.routes';
 import passport from 'passport';
 import Strategy from 'passport-auth-token';
 import { findPublisherByAccessToken } from './services/publishers.service';
 import ForbiddenException from './exceptions/forbidden.exception';
+import { privateCorsConfig, publicCorsConfig } from './util/corsOptions';
 
 const app = express();
 const port = process.env.PORT || 3001;
-const { NODE_ENV } = process.env;
 
-// various configs/use
-const corsConfig: CorsOptions = {
-  origin: NODE_ENV !== 'production' ? corsWhitelistDev : corsWhitelistProd,
-  optionsSuccessStatus: 200,
-  credentials: true,
-};
-
-app.use(cors(corsConfig));
+app.use(cors(privateCorsConfig));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -71,7 +63,9 @@ app.use('/v1', leaguesRouter);
 app.use('/v1', loginRouter);
 
 // health check
-app.get('/health', (req: Request, res: Response) => res.sendStatus(200));
+app.get('/health', cors(publicCorsConfig), (req: Request, res: Response) =>
+  res.sendStatus(200)
+);
 
 // error handlers
 app.use(httpErrorHandler);

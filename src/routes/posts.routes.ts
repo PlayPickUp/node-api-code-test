@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { create, del, posts, update } from '../controllers/posts.controller';
 import passport from 'passport';
+import cors from 'cors';
+import { publicCorsConfig } from '../util/corsOptions';
 
 const postsRouter = express.Router();
 
@@ -8,6 +10,7 @@ postsRouter.get('/', (req: Request, res: Response) => res.sendStatus(403));
 
 postsRouter.get(
   '/posts',
+  cors(publicCorsConfig),
   async (req: Request, res: Response) => await posts(req, res)
 );
 postsRouter.post(
