@@ -1,6 +1,6 @@
 import knex from '../util/db';
-import {epochNow, epochNowPlus48} from '../util/epochConverts';
-import {Prop} from '../models/prop.model';
+import { epochNow, epochNowPlus48 } from '../util/epochConverts';
+import { Prop } from '../models/prop.model';
 
 // Get props
 export const getProps = async (

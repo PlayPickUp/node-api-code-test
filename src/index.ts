@@ -1,5 +1,5 @@
-import express, {Request, Response} from 'express';
-import cors, {CorsOptions} from 'cors';
+import express, { Request, Response } from 'express';
+import cors, { CorsOptions } from 'cors';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
 import path from 'path';
@@ -8,14 +8,14 @@ import propsRouter from './routes/props.routes';
 import publishersRouter from './routes/publishers.routes';
 import postsRouter from './routes/posts.routes';
 import leaguesRouter from './routes/leagues.routes';
-import {httpErrorHandler} from './middleware/httpError.middleware';
-import {forbiddenErrorHandler} from './middleware/forbiddenError.middleware';
-import {notFoundErrorHandler} from './middleware/notFoundError.middleware';
-import {corsWhitelistDev, corsWhitelistProd} from './constants/corsWhitelist';
+import { httpErrorHandler } from './middleware/httpError.middleware';
+import { forbiddenErrorHandler } from './middleware/forbiddenError.middleware';
+import { notFoundErrorHandler } from './middleware/notFoundError.middleware';
+import { corsWhitelistDev, corsWhitelistProd } from './constants/corsWhitelist';
 import loginRouter from './routes/login.routes';
 import passport from 'passport';
 import Strategy from 'passport-auth-token';
-import {findPublisherByAccessToken} from './services/publishers.service';
+import { findPublisherByAccessToken } from './services/publishers.service';
 import ForbiddenException from './exceptions/forbidden.exception';
 
 const app = express();

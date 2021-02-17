@@ -1,5 +1,5 @@
 import knex from '../util/db';
-import {Post, PostCreate, PostUpdate} from '../models/posts.model';
+import { Post, PostCreate, PostUpdate } from '../models/posts.model';
 import moment from 'moment';
 
 // get posts

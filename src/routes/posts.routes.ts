@@ -1,5 +1,5 @@
-import express, {Request, Response} from 'express';
-import {create, del, posts, update} from '../controllers/posts.controller';
+import express, { Request, Response } from 'express';
+import { create, del, posts, update } from '../controllers/posts.controller';
 import passport from 'passport';
 
 const postsRouter = express.Router();

@@ -1,5 +1,5 @@
-import {Request, Response} from 'express';
-import {getClosingProps, getProps} from '../services/props.service';
+import { Request, Response } from 'express';
+import { getClosingProps, getProps } from '../services/props.service';
 
 export const props = async (req: Request, res: Response): Promise<Response> => {
   if (req.method === 'GET') {

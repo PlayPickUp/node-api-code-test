@@ -1,5 +1,5 @@
 import knex from '../util/db';
-import {Publisher} from '../models/publishers.model';
+import { Publisher } from '../models/publishers.model';
 import NotFoundException from '../exceptions/notFound.exception';
 import BadRequestException from '../exceptions/badRequest.exception';
 

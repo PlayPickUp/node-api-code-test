@@ -1,5 +1,10 @@
-import {Request, Response} from 'express';
-import {createPost, deletePost, getPosts, updatePost,} from '../services/posts.service';
+import { Request, Response } from 'express';
+import {
+  createPost,
+  deletePost,
+  getPosts,
+  updatePost,
+} from '../services/posts.service';
 
 export const posts = async (req: Request, res: Response): Promise<Response> => {
   const { query } = req;
