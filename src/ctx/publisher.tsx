@@ -4,8 +4,8 @@ import ReactDOMServer from 'react-dom/server';
 import juice from 'juice';
 import split from 'lodash/split';
 
-import { head } from '../emails/PublisherDemo/head';
-import { footer } from '../emails/PropsDigest/footer';
+import {head} from '../emails/PublisherDemo/head';
+import {footer} from '../emails/PropsDigest/footer';
 import PublisherDemo from '../emails/PublisherDemo';
 
 const PUBLISHER_DEMO_SEND_TO = process.env.PUBLISHER_DEMO_SEND_TO;

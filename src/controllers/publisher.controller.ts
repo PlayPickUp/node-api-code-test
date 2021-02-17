@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import { deliverDemo } from '../ctx/publisher';
+import {Request, Response} from 'express';
+import {deliverDemo} from '../ctx/publisher';
 
 export const sendDemoRequest = async (
   req: Request,

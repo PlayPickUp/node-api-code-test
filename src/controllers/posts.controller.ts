@@ -1,10 +1,5 @@
-import { Request, Response } from 'express';
-import {
-  createPost,
-  getPosts,
-  updatePost,
-  deletePost,
-} from '../services/posts.service';
+import {Request, Response} from 'express';
+import {createPost, deletePost, getPosts, updatePost,} from '../services/posts.service';
 
 export const posts = async (req: Request, res: Response): Promise<Response> => {
   const { query } = req;
@@ -59,7 +54,7 @@ export const del = async (req: Request, res: Response): Promise<Response> => {
     query: { id },
   } = req;
   if (!id) {
-    return res.sendStatus(500);
+    return res.sendStatus(400);
   }
   try {
     const response = await deletePost(id as string);

@@ -1,4 +1,4 @@
-import { Leagues } from '../models/leagues.model';
+import {Leagues} from '../models/leagues.model';
 
 export const getLeagues = (): Leagues => {
   const leagues: Leagues = [
