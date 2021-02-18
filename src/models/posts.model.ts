@@ -6,6 +6,7 @@ interface PostBody {
   headline: string;
   excerpt: string;
   featured_img: string;
+  publisher_name: string;
 }
 
 export interface Post extends PostBody {
