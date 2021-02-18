@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express';
-import cors from 'cors';
+import cors, { CorsRequest } from 'cors';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
 import path from 'path';
@@ -26,6 +26,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+app.options('*', cors<CorsRequest>());
 
 passport.use(
   'publishertoken',
