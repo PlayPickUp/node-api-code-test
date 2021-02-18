@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import split from 'lodash/split';
+
 import {
   createPost,
   deletePost,
@@ -61,12 +63,24 @@ export const del = async (req: Request, res: Response): Promise<Response> => {
   if (!id) {
     return res.sendStatus(400);
   }
+  const idPayload = split(id as string, ',');
+
   try {
-    const response = await deletePost(id as string);
-    if (!response) throw new Error('Could not delete post(s)!');
+    const failedDeletes: string[] = [];
+    for (const postId of idPayload) {
+      const response = await deletePost(postId as string);
+      if (!response) failedDeletes.push(postId);
+    }
+    if (failedDeletes.length > 0) {
+      return res.json({
+        message:
+            'Delete completed with errors: the following Posts were not deleted: ' +
+            failedDeletes,
+      });
+    }
     return res.json({ message: 'Deleted' });
   } catch (err) {
     console.error(err);
-    return res.sendStatus(500);
+    return res.sendStatus(500).send(err);
   }
 };
