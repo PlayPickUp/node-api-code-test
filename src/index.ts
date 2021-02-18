@@ -16,12 +16,11 @@ import passport from 'passport';
 import Strategy from 'passport-auth-token';
 import { findPublisherByAccessToken } from './services/publishers.service';
 import ForbiddenException from './exceptions/forbidden.exception';
-import { privateCorsConfig, publicCorsConfig } from './util/corsOptions';
+import { publicCorsConfig } from './util/corsOptions';
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-app.use(cors(privateCorsConfig));
 app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

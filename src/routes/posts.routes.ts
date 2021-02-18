@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express';
 import { create, del, posts, update } from '../controllers/posts.controller';
 import passport from 'passport';
 import cors from 'cors';
-import { publicCorsConfig } from '../util/corsOptions';
+import { privateCorsConfig, publicCorsConfig } from '../util/corsOptions';
 
 const postsRouter = express.Router();
 
@@ -15,18 +15,21 @@ postsRouter.get(
 );
 postsRouter.post(
   '/posts',
+  cors(privateCorsConfig),
   passport.authenticate('publishertoken', { session: false }),
   async (req: Request, res: Response) => await create(req, res)
 );
 
 postsRouter.put(
   '/posts',
+  cors(privateCorsConfig),
   passport.authenticate('publishertoken', { session: false }),
   async (req: Request, res: Response) => await update(req, res)
 );
 
 postsRouter.delete(
   '/posts',
+  cors(privateCorsConfig),
   passport.authenticate('admintoken', { session: false }),
   async (req: Request, res: Response) => await del(req, res)
 );
