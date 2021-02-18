@@ -74,8 +74,8 @@ export const del = async (req: Request, res: Response): Promise<Response> => {
     if (failedDeletes.length > 0) {
       return res.json({
         message:
-            'Delete completed with errors: the following Posts were not deleted: ' +
-            failedDeletes,
+          'Delete completed with errors: the following Posts were not deleted: ' +
+          failedDeletes,
       });
     }
     return res.json({ message: 'Deleted' });

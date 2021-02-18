@@ -58,8 +58,8 @@ export const createPost = async (body: PostCreate): Promise<string | void> => {
         prop_id,
       })
       .catch((err: string) => new Error(err));
-    if (post.name === "Error") {
-      throw new Error(post.message)
+    if (post.name === 'Error') {
+      throw new Error(post.message);
     }
     return post;
   } catch (err) {
