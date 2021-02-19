@@ -6,17 +6,18 @@ import { privateCorsConfig } from '../util/corsOptions';
 
 const postsRouter = express.Router();
 
-postsRouter.get('/', (req: Request, res: Response) => res.sendStatus(403));
-
 postsRouter.get(
   '/posts',
   cors(),
+  passport.authenticate('publishertoken', { session: false }),
   async (req: Request, res: Response) => await posts(req, res)
 );
 postsRouter.post(
   '/posts',
-  cors(privateCorsConfig),
-  passport.authenticate('publishertoken', { session: false }),
+  cors(),
+  passport.authenticate('publishertoken', {
+    session: false,
+  }),
   async (req: Request, res: Response) => await create(req, res)
 );
 

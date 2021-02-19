@@ -10,7 +10,7 @@ export const findPublisherByAccessToken = async (
     if (!access_token) {
       throw new BadRequestException('Must provide a valid access token!');
     }
-    const publisher: Publisher = knex
+    const publisher: Publisher = await knex
       .select()
       .from('publishers')
       .where({ access_token })

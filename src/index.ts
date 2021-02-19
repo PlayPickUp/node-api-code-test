@@ -5,6 +5,7 @@ import favicon from 'serve-favicon';
 import path from 'path';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
+import morgan from 'morgan';
 
 import propsRouter from './routes/props.routes';
 import publishersRouter from './routes/publishers.routes';
@@ -35,9 +36,11 @@ Sentry.init({
   tracesSampleRate: NODE_ENV !== 'production' ? 1.0 : 0.5,
 });
 
+app.use(morgan('combined'));
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 app.use(helmet());
+app.use(passport.initialize());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
