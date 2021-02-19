@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
+    "@sentry/node": "^6.2.0",
+    "@sentry/tracing": "^6.2.0",
     "@types/lodash": "^4.14.168",
     "chalk": "^4.1.0",
     "cors": "^2.8.5",

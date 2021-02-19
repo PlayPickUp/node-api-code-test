@@ -3,6 +3,8 @@ import cors, { CorsRequest } from 'cors';
 import helmet from 'helmet';
 import favicon from 'serve-favicon';
 import path from 'path';
+import * as Sentry from '@sentry/node';
+import * as Tracing from '@sentry/tracing';
 
 import propsRouter from './routes/props.routes';
 import publishersRouter from './routes/publishers.routes';
@@ -17,11 +19,25 @@ import Strategy from 'passport-auth-token';
 import { findPublisherByAccessToken } from './services/publishers.service';
 import ForbiddenException from './exceptions/forbidden.exception';
 import { publicCorsConfig } from './util/corsOptions';
+import { dsn } from './constants/sentry';
+
+const { NODE_ENV } = process.env;
 
 const app = express();
 const port = process.env.PORT || 3001;
 
-// app.use(helmet());
+Sentry.init({
+  dsn,
+  integrations: [
+    new Sentry.Integrations.Http({ tracing: true }),
+    new Tracing.Integrations.Express({ app }),
+  ],
+  tracesSampleRate: NODE_ENV !== 'production' ? 1.0 : 0.5,
+});
+
+app.use(Sentry.Handlers.requestHandler());
+app.use(Sentry.Handlers.tracingHandler());
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -67,6 +83,9 @@ app.use('/v1', loginRouter);
 app.get('/health', cors(publicCorsConfig), (req: Request, res: Response) =>
   res.sendStatus(200)
 );
+
+// This error handler must be before any other error middleware and after all controllers
+app.use(Sentry.Handlers.errorHandler());
 
 // error handlers
 app.use(httpErrorHandler);
