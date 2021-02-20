@@ -2,19 +2,19 @@ import express, { Request, Response } from 'express';
 import { create, del, posts, update } from '../controllers/posts.controller';
 import passport from 'passport';
 import cors from 'cors';
-import { privateCorsConfig } from '../util/corsOptions';
+import { privateCorsConfig, publicCorsConfig } from '../util/corsOptions';
 
 const postsRouter = express.Router();
 
 postsRouter.get(
   '/posts',
-  cors(),
+  cors(publicCorsConfig),
   passport.authenticate('publishertoken', { session: false }),
   async (req: Request, res: Response) => await posts(req, res)
 );
 postsRouter.post(
   '/posts',
-  cors(),
+  cors(publicCorsConfig),
   passport.authenticate('publishertoken', {
     session: false,
   }),
@@ -23,7 +23,7 @@ postsRouter.post(
 
 postsRouter.put(
   '/posts',
-  cors(privateCorsConfig),
+  cors(publicCorsConfig),
   passport.authenticate('publishertoken', { session: false }),
   async (req: Request, res: Response) => await update(req, res)
 );
