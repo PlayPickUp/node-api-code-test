@@ -10,4 +10,4 @@ export const corsWhitelistProd = [
   'https://p.pckp.io',
 ];
 
-export const publicWhiteList = ['*'];
+export const publicWhiteList = '*';
