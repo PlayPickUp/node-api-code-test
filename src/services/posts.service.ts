@@ -46,6 +46,7 @@ export const createPost = async (body: PostCreate): Promise<string | void> => {
     featured_img,
     prop_id,
     publisher_name,
+    author_id,
   } = body;
   try {
     const post = await knex('posts')
@@ -58,6 +59,7 @@ export const createPost = async (body: PostCreate): Promise<string | void> => {
         featured_img,
         prop_id,
         publisher_name,
+        author_id,
       })
       .catch((err: string) => new Error(err));
     if (post.name === 'Error') {
@@ -80,6 +82,7 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
     featured_img,
     prop_id,
     publisher_name,
+    author_id,
   } = body;
   try {
     const post = await knex('posts')
@@ -94,6 +97,7 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
         prop_id,
         publisher_name,
         updated_at: moment().format(),
+        author_id,
       })
       .catch((err: string) => new Error(err));
     if (!post) {

@@ -160,6 +160,11 @@ paths:
   /users:
     get:
       description: 'Returns a collection of PickUp admin users'
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          description: ID of user to return
       responses:
         200:
           description: 'Successfully returned a collection of PickUp admin users'
