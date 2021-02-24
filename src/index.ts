@@ -30,6 +30,7 @@ const port = process.env.PORT || 3001;
 
 Sentry.init({
   dsn,
+  environment: NODE_ENV,
   integrations: [
     new Sentry.Integrations.Http({ tracing: true }),
     new Tracing.Integrations.Express({ app }),
