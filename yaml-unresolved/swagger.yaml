@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.4.0
+  version: 0.5.0
   title: PickUp Node API
   description: PickUp's Node API
 paths:
@@ -206,6 +206,14 @@ paths:
           items:
             type: string
           description: Returns post or posts with matching ID(s)
+        - in: query
+          name: article_url
+          type: string
+          description: Returns post or posts with matching article_url values
+        - in: query
+          name: prop_id
+          type: integer
+          description: Returns post or posts with matching prop_id value
         - in: query
           name: token
           type: string
