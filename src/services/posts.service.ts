@@ -1,38 +1,52 @@
 import knex from '../util/db';
 import { Post, PostCreate, PostUpdate } from '../models/posts.model';
 import moment from 'moment';
+import omitBy from 'lodash/omitBy';
+import omit from 'lodash/omit';
+import { QueryBuilder } from 'knex';
+
+export interface GetPosts {
+  (
+    limit: number | undefined,
+    offset: number | undefined,
+    id: string | undefined,
+    article_url?: string | undefined,
+    prop_id?: string | undefined
+  ): Promise<Post | Post[] | void>;
+}
 
 // get posts
-export const getPosts = async (
-  limit: string | undefined = '25',
-  offset: string | undefined = '0',
-  id: string
-): Promise<Post | Post[] | void> => {
-  if (id) {
-    // get single post
-    const post: Post = await knex.select('*').from('posts').where({ id });
-    if (!post) {
-      throw new Error('Could not get prop!');
-    }
-    return post;
-  } else {
-    // get multiple posts
-    try {
-      const posts: Post[] = await knex
-        .select('*')
-        .from('posts')
-        .where({ deleted_at: null })
-        .orderBy('id', 'desc')
-        .limit(limit)
-        .offset(offset);
-      if (!posts) {
-        throw new Error('Could not get Posts');
-      }
-      return posts;
-    } catch (err) {
-      console.error(err);
-    }
+export const getPosts: GetPosts = async (
+  limit = 25,
+  offset = 0,
+  id,
+  article_url,
+  prop_id
+) => {
+  const posts: Post | Post[] = knex
+    .select()
+    .from('posts')
+    .where((builder: QueryBuilder) => {
+      const query = { limit, offset, id, article_url, prop_id };
+      const computedQuery: Record<string, string | number | undefined> = omitBy(
+        query,
+        (item) => {
+          if (item === undefined || item === null) {
+            return true;
+          }
+          return false;
+        }
+      );
+      builder
+        .where(omit(computedQuery, ['limit', 'offset']))
+        .andWhere({ deleted_at: null });
+    })
+    .limit(limit)
+    .offset(offset);
+  if (!posts) {
+    throw new Error('Could not retrieve posts from API!');
   }
+  return posts;
 };
 
 // create post

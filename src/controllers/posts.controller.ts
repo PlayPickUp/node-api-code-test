@@ -11,12 +11,14 @@ import {
 export const posts = async (req: Request, res: Response): Promise<Response> => {
   const { query } = req;
 
-  const limit = query.limit as string;
-  const offset = query.offset as string;
+  const limit: number = query.limit as any;
+  const offset: number = query.offset as any;
   const id = query.id as string;
+  const article_url = query.article_url as string;
+  const prop_id = query.prop_id as string;
 
   try {
-    const posts = await getPosts(limit, offset, id);
+    const posts = await getPosts(limit, offset, id, article_url, prop_id);
     if (!posts) throw new Error('Could not get posts from database!');
     return res.json(posts);
   } catch (err) {
