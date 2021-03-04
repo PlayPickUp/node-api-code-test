@@ -42,7 +42,8 @@ export const getPosts: GetPosts = async (
         .andWhere({ deleted_at: null });
     })
     .limit(limit)
-    .offset(offset);
+    .offset(offset)
+    .orderBy('id', 'desc');
   if (!posts) {
     throw new Error('Could not retrieve posts from API!');
   }
