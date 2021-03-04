@@ -11,7 +11,8 @@ export interface GetPosts {
     offset: number | undefined,
     id: string | undefined,
     article_url?: string | undefined,
-    prop_id?: string | undefined
+    prop_id?: string | undefined,
+    league?: string | undefined
   ): Promise<Post | Post[] | void>;
 }
 
@@ -21,7 +22,8 @@ export const getPosts: GetPosts = async (
   offset = 0,
   id,
   article_url,
-  prop_id
+  prop_id,
+  league
 ) => {
   const posts: Post | Post[] = knex
     .select()
@@ -67,7 +69,7 @@ export const createPost = async (body: PostCreate): Promise<string | void> => {
     const post = await knex('posts')
       .insert({
         post_title,
-        league: JSON.stringify(league),
+        league: JSON.stringify({ leagues: league }),
         article_url,
         headline,
         excerpt,
@@ -104,7 +106,7 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
       .where({ id })
       .update({
         post_title,
-        league: JSON.stringify(league),
+        league: JSON.stringify({ leagues: league }),
         article_url,
         headline,
         excerpt,

@@ -1,6 +1,6 @@
 interface PostBody {
   post_title: string;
-  league: Array<string>;
+  league: { leagues: string };
   prop_id: number;
   article_url: string;
   headline: string;

@@ -35,11 +35,17 @@ const options = {
   await bundler.bundle();
   console.log(chalk.yellow('🚧   Moving some files around...'));
   try {
+    // copy public folder and contents
     fs.copy(
       path.join(__dirname, '..', 'src/public'),
       path.join(__dirname, '..', 'dist/public')
     ).then(() =>
       console.log(chalk.green('✅   Copied Express folders successfully!'))
+    );
+    // copy scripts
+    fs.copy(
+      path.join(__dirname, '..', 'scripts'),
+      path.join(__dirname, '..', 'dist/scripts')
     );
   } catch (err) {
     console.error(chalk.red(`🚨  Something went wrong: ${err}`));
