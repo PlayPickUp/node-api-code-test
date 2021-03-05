@@ -16,9 +16,17 @@ export const posts = async (req: Request, res: Response): Promise<Response> => {
   const id = query.id as string;
   const article_url = query.article_url as string;
   const prop_id = query.prop_id as string;
+  const league = query.league as string;
 
   try {
-    const posts = await getPosts(limit, offset, id, article_url, prop_id);
+    const posts = await getPosts(
+      limit,
+      offset,
+      id,
+      article_url,
+      prop_id,
+      league
+    );
     if (!posts) throw new Error('Could not get posts from database!');
     return res.json(posts);
   } catch (err) {

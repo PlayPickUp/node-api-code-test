@@ -26,7 +26,7 @@ export const getPosts: GetPosts = async (
   league
 ) => {
   const posts: Post | Post[] = knex
-    .select()
+    .select('*')
     .from('posts')
     .where((builder: QueryBuilder) => {
       const query = { limit, offset, id, article_url, prop_id };
@@ -39,9 +39,16 @@ export const getPosts: GetPosts = async (
           return false;
         }
       );
-      builder
-        .where(omit(computedQuery, ['limit', 'offset']))
-        .andWhere({ deleted_at: null });
+      if (!league) {
+        builder
+          .where(omit(computedQuery, ['limit', 'offset']))
+          .andWhere({ deleted_at: null });
+      } else {
+        builder
+          .where(omit(computedQuery, ['limit', 'offset']))
+          .andWhere(knex.raw(`league->>'leagues' like ?`, [league]))
+          .andWhere({ deleted_at: null });
+      }
     })
     .limit(limit)
     .offset(offset)
