@@ -38,10 +38,22 @@ const updateRecords = async () => {
       const updates = async () =>
         await Promise.all(
           posts.map(async (post) => {
-            await knex('posts')
-              .where({ id: post.id })
-              .update({ league: JSON.stringify({ leagues: post.league }) })
+            const publisherMeta = await knex('publishers')
+              .select('id', 'logo', 'source_url')
+              .where('name', 'like', post.publisher_name)
               .catch((err) => console.error(err));
+
+            if (publisherMeta.length > 0) {
+              console.log(publisherMeta);
+              await knex('posts')
+                .where({ id: post.id })
+                .update({
+                  publisher_id: publisherMeta[0].id || null,
+                  publisher_logo: publisherMeta[0].logo || null,
+                  publisher_source_url: publisherMeta[0].source_url || null,
+                })
+                .catch((err) => console.error(err));
+            }
           })
         );
       await updates();
