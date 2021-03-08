@@ -143,6 +143,9 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
         publisher_name,
         updated_at: moment().format(),
         author_id,
+        publisher_id,
+        publisher_logo,
+        publisher_source_url,
       })
       .catch((err: string) => new Error(err));
     if (!post) {
