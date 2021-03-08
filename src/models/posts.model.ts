@@ -8,6 +8,9 @@ interface PostBody {
   featured_img: string;
   publisher_name: string;
   author_id: number | string | null;
+  publisher_id: number | string | null;
+  publisher_source_url: string | null;
+  publisher_logo: string | null;
 }
 
 export interface Post extends PostBody {

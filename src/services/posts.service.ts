@@ -62,17 +62,31 @@ export const getPosts: GetPosts = async (
 // create post
 export const createPost = async (body: PostCreate): Promise<string | void> => {
   const {
-    post_title,
-    league,
+    author_id,
+    publisher_id,
+    publisher_logo,
+    publisher_source_url,
     article_url,
-    headline,
     excerpt,
     featured_img,
+    headline,
+    league,
+    post_title,
     prop_id,
     publisher_name,
-    author_id,
   } = body;
   try {
+    let publisherMeta;
+
+    if (publisher_id) {
+      publisherMeta = await knex('publishers')
+        .select('id', 'source_url', 'logo')
+        .where({ id: publisher_id })
+        .catch((err: string) => {
+          throw new Error(err);
+        });
+    }
+
     const post = await knex('posts')
       .insert({
         post_title,
@@ -84,6 +98,10 @@ export const createPost = async (body: PostCreate): Promise<string | void> => {
         prop_id,
         publisher_name,
         author_id,
+        publisher_id,
+        publisher_logo: publisherMeta?.publisher_logo || publisher_logo,
+        publisher_source_url:
+          publisherMeta?.publisher_source_url || publisher_source_url,
       })
       .catch((err: string) => new Error(err));
     if (post.name === 'Error') {
@@ -107,6 +125,9 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
     prop_id,
     publisher_name,
     author_id,
+    publisher_id,
+    publisher_logo,
+    publisher_source_url,
   } = body;
   try {
     const post = await knex('posts')
