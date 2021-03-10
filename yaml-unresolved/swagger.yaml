@@ -176,10 +176,10 @@ paths:
             type: array
             items:
               type: object
-              properties: 
-                count: 
+              properties:
+                count:
                   type: string
-                  example: "23"
+                  example: '23'
         403:
           description: Permission Denied
           schema:
