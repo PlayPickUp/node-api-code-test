@@ -99,9 +99,16 @@ export const createPost = async (body: PostCreate): Promise<string | void> => {
         publisher_name,
         author_id,
         publisher_id,
-        publisher_logo: publisherMeta[0]?.publisher_logo || publisher_logo,
+        publisher_logo:
+          (publisherMeta &&
+            publisherMeta.length > 0 &&
+            publisherMeta[0]?.publisher_logo) ||
+          publisher_logo,
         publisher_source_url:
-          publisherMeta[0]?.publisher_source_url || publisher_source_url,
+          (publisherMeta &&
+            publisherMeta.length > 0 &&
+            publisherMeta[0]?.publisher_source_url) ||
+          publisher_source_url,
       })
       .catch((err: string) => new Error(err));
     if (post.name === 'Error') {
