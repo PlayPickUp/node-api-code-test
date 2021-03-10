@@ -1,4 +1,5 @@
 import { Leagues } from '../models/leagues.model';
+import knex from '../util/db';
 
 export const getLeagues = (): Leagues => {
   const leagues: Leagues = [
@@ -56,4 +57,17 @@ export const getLeagues = (): Leagues => {
     },
   ];
   return leagues;
+};
+
+export const getLeaguePostCount = async (
+  league: string
+): Promise<Array<{ count: string }>> => {
+  const count = await knex('posts')
+    .where(knex.raw(`league->>'leagues' like ?`, [league]))
+    .andWhere({ deleted_at: null })
+    .count()
+    .catch((err: string) => {
+      throw new Error(err);
+    });
+  return count;
 };
