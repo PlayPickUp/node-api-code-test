@@ -157,6 +157,37 @@ paths:
               message:
                 type: string
                 example: 'Forbidden'
+  /leagues/postCount:
+    get:
+      description: 'Returns a number of active posts that exist under passed league(s)'
+      parameters:
+        - in: query
+          name: token
+          type: string
+          required: true
+        - in: query
+          name: league
+          type: string
+          required: true
+      responses:
+        200:
+          description: 'Successfully returned a count of active posts for league(s)'
+          schema:
+            type: array
+            items:
+              type: object
+              properties: 
+                count: 
+                  type: string
+                  example: "23"
+        403:
+          description: Permission Denied
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Forbidden'
   /users:
     get:
       description: 'Returns a collection of PickUp admin users'
