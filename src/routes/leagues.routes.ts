@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express';
 import { leagues, leaguePostCount } from '../controllers/leagues.controller';
 import cors from 'cors';
+import passport from 'passport';
+
 import { privateCorsConfig } from '../util/corsOptions';
 
 const leaguesRouter = express.Router();
@@ -8,6 +10,7 @@ const leaguesRouter = express.Router();
 leaguesRouter.get(
   '/leagues/postCount',
   cors(privateCorsConfig),
+  passport.authenticate('publishertoken', { session: false }),
   async (req: Request, res: Response) => await leaguePostCount(req, res)
 );
 
