@@ -1,6 +1,6 @@
 {
   "name": "pickup-node-api",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Node API for PlayPickUp",
   "main": "index.js",
   "repository": "git@github.com:PlayPickUp/pickup-node-api.git",
