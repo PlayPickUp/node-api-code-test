@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import passport from 'passport';
 import cors from 'cors';
-import { privateCorsConfig, publicCorsConfig } from '../util/corsOptions';
+import { publicCorsConfig } from '../util/corsOptions';
 import {createEvent} from "../controllers/events.controller";
 
 const eventsRouter = express.Router();
