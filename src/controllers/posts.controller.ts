@@ -5,6 +5,7 @@ import {
   createPost,
   deletePost,
   getPosts,
+  patchPost,
   updatePost,
 } from '../services/posts.service';
 
@@ -59,6 +60,22 @@ export const update = async (
   try {
     const post = await updatePost(body).catch((err) => new Error(err));
     if (!post) throw new Error('Could not update post!');
+    return res.json({ message: 'Updated' });
+  } catch (err) {
+    console.error(err);
+    return res.sendStatus(500).send(err);
+  }
+};
+
+export const patch = async (req: Request, res: Response): Promise<Response> => {
+  const { body } = req;
+  try {
+    const post = await patchPost(body).catch((err) => {
+      throw err;
+    });
+    if (!post) {
+      throw new Error('Could not patch post!');
+    }
     return res.json({ message: 'Updated' });
   } catch (err) {
     console.error(err);

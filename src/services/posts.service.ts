@@ -1,5 +1,11 @@
 import knex from '../util/db';
-import { Post, PostCreate, PostUpdate } from '../models/posts.model';
+import {
+  Post,
+  PostCreate,
+  PostUpdate,
+  PostID,
+  PostPatch,
+} from '../models/posts.model';
 import moment from 'moment';
 import omitBy from 'lodash/omitBy';
 import omit from 'lodash/omit';
@@ -174,21 +180,43 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
     if (!post) {
       throw new Error('Could not update post record!');
     }
+    if (post.name === 'Error') {
+      throw new Error(post.message);
+    }
     return post;
   } catch (err) {
     console.error(err);
   }
 };
 
-export const deletePost = async (
-  id: number | string
-): Promise<string | void> => {
+export const patchPost = async (body: PostPatch): Promise<string | void> => {
+  try {
+    const { id } = body;
+    const post = await knex('posts')
+      .where({ id })
+      .update({ ...body, updated_at: moment().format() });
+    if (!post) {
+      throw new Error('Could not update post with method patchPost');
+    }
+    if (post.name === 'Error') {
+      throw new Error(post.message);
+    }
+    return post;
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+export const deletePost = async (id: PostID): Promise<string | void> => {
   try {
     const post = await knex('posts')
       .where({ id })
       .update({ deleted_at: moment().format() });
     if (!post) {
       throw new Error('Could not delete post record!');
+    }
+    if (post.name === 'Error') {
+      throw new Error(post.message);
     }
     return post;
   } catch (err) {
