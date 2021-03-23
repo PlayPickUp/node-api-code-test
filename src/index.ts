@@ -22,7 +22,7 @@ import { forbiddenErrorHandler } from './middleware/forbiddenError.middleware';
 import { httpErrorHandler } from './middleware/httpError.middleware';
 import { notFoundErrorHandler } from './middleware/notFoundError.middleware';
 import { publicCorsConfig } from './util/corsOptions';
-import eventsRouter from "./routes/events.routes";
+import eventsRouter from './routes/events.routes';
 
 const { NODE_ENV } = process.env;
 
