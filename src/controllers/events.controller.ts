@@ -14,6 +14,6 @@ export const createEvent = async (
     return res.sendStatus(201);
   } catch (err) {
     console.error(err);
-    return res.sendStatus(500).send(err);
+    return res.sendStatus(500);
   }
 };
