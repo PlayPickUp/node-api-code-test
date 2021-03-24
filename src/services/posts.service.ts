@@ -192,9 +192,10 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
 export const patchPost = async (body: PostPatch): Promise<string | void> => {
   try {
     const { id } = body;
+    const payload = omit(body, ['id']);
     const post = await knex('posts')
       .where({ id })
-      .update({ ...body, updated_at: moment().format() });
+      .update({ ...payload, updated_at: moment().format() });
     if (!post) {
       throw new Error('Could not update post with method patchPost');
     }
