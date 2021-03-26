@@ -10,6 +10,7 @@ import moment from 'moment';
 import omitBy from 'lodash/omitBy';
 import omit from 'lodash/omit';
 import { QueryBuilder } from 'knex';
+import { generateFeaturedImg } from '../helpers/posts/featuredImage.helper';
 
 export interface GetPosts {
   (
@@ -72,7 +73,7 @@ export const getPosts: GetPosts = async (
 };
 
 // create post
-export const createPost = async (body: PostCreate): Promise<string | void> => {
+export const createPost = async (body: PostCreate): Promise<Post | void> => {
   const {
     author_id,
     publisher_id,
@@ -124,19 +125,25 @@ export const createPost = async (body: PostCreate): Promise<string | void> => {
             publisher_source_url:
               meta?.source_url || publisher_source_url || '',
           })
+          .returning(['id', 'featured_img'])
           .catch((err: string) => {
             throw new Error(err);
           });
         if (post.name === 'Error') {
           throw new Error(post.message);
         }
+
         return post;
       })
-      .then((post) => post)
+      .then((post: Post[]) => {
+        // throw the featured image over to kasper for processing
+        generateFeaturedImg(post[0].id, post[0].featured_img);
+        return post;
+      })
       .catch((err) => {
         throw new Error(err);
       });
-    return post;
+    return post[0];
   } catch (err) {
     console.error(err);
   }
@@ -158,7 +165,19 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
     publisher_logo,
     publisher_source_url,
   } = body;
+
   try {
+    const existingImg = await knex('posts')
+      .select('featured_img')
+      .where({ id })
+      .catch((err: Error) => {
+        throw err;
+      });
+
+    if (existingImg[0].featured_img !== featured_img) {
+      generateFeaturedImg(id, featured_img);
+    }
+
     const post = await knex('posts')
       .where({ id })
       .update({
@@ -176,6 +195,7 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
         publisher_logo,
         publisher_source_url,
       })
+      .returning(['id', 'featured_img'])
       .catch((err: string) => new Error(err));
     if (!post) {
       throw new Error('Could not update post record!');
@@ -190,6 +210,7 @@ export const updatePost = async (body: PostUpdate): Promise<string | void> => {
 };
 
 export const patchPost = async (body: PostPatch): Promise<string | void> => {
+  // ⚠️ note: beware throwing featured image processing in here, you'll probably make an infinite loop
   try {
     const { id } = body;
     const payload = omit(body, ['id']);
