@@ -9,7 +9,7 @@ const eventsRouter = express.Router();
 eventsRouter.post(
   '/events',
   cors(publicCorsConfig),
-  passport.authenticate('admintoken', {
+  passport.authenticate('eventstoken', {
     session: false,
   }),
   async (req: Request, res: Response) => await createEvent(req, res)
