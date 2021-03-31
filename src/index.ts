@@ -68,7 +68,7 @@ passport.use(
 passport.use(
     'admintoken',
     new Strategy(async function (token, done) {
-        if (token && token === process.env.EVENT_LOGGER_TOKEN) {
+        if (token && token === process.env.ADMIN_TOKEN) {
             return done(null, token);
         } else {
             return done(
@@ -81,11 +81,11 @@ passport.use(
 passport.use(
     'eventstoken',
     new Strategy(async function (token, done) {
-        if (token && token === process.env.ADMIN_TOKEN) {
+        if (token && token === process.env.EVENT_LOGGER_TOKEN) {
             return done(null, token);
         } else {
             return done(
-                new ForbiddenException('No valid admin access token provided')
+                new ForbiddenException('No valid event token provided')
             );
         }
     })
