@@ -176,10 +176,10 @@ paths:
             type: array
             items:
               type: object
-              properties:
-                count:
+              properties: 
+                count: 
                   type: string
-                  example: '23'
+                  example: "23"
         403:
           description: Permission Denied
           schema:
@@ -219,6 +219,198 @@ paths:
                 avatar:
                   type: string
                   example: headshot.jpg
+  /buckets:
+    get: 
+      description: Gets a collection of Post Bukcets
+      parameters:
+        - in: query
+          name: id
+          type: integer
+          description: Gets a bucket by ID
+        - in: query
+          name: location
+          type: string
+          description: 'Gets buckets by location'
+        - in: query
+          name: token
+          type: string
+          required: true
+          description: 'Active publisher token'
+      responses:
+        200:
+          description: 'Successfully returned collection of Post Buckets'
+          schema:
+            type: array
+            items: 
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 23
+                title:
+                  type: string
+                  example: "J.J. Watt to the Cards!"
+                position:
+                  type: string
+                  example: 'homepage'
+                created_by_id:
+                  type: integer
+                  example: 2
+                  description: 'Admin user who created the bucket'
+                created_at:
+                  type: string
+                  example: '2021-04-01T19:37:20.531Z'
+                updated_at:
+                  type: string
+                  example: '2021-04-01T20:37:20.531Z'
+                deleted_at:
+                  type: string
+                  example: '2021-04-20T19:37:20.531Z'
+        400:
+          description: Bad request, did you pass an access token?
+          schema:
+            type: object
+            properties: 
+              message:
+                type: string
+                example: 'Bad Request'
+    post:
+      description: Creates a Post Bucket
+      consumes:
+        - application/json
+      parameters:
+      - in: query
+        name: token
+        type: string
+        description: Admin token
+        required: true
+      - in: body
+        name: post
+        description: Creates a PickUp Post Bucket with supplied properties
+        schema:
+          type: object
+          required:
+            - title
+            - position
+          properties:
+            title:
+              type: string
+              example: 'J.J. Watts to the Cards!'
+            position: 
+              type: string
+              example: 'homepage'
+            updated_at:
+              type: string
+              example: '2021-04-20T19:37:20.531Z'
+            deleted_at:
+              type: string
+              example: '2021-04-20T19:37:20.531Z'
+      responses:
+        201:
+          description: 'Successfully created bucket'
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Created
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Bad Request
+                
+    put:
+      description: Updates a Post Bucket
+      consumes:
+        - application/json
+      parameters:
+      - in: query
+        name: token
+        type: string
+        description: Admin token
+        required: true
+      - in: query
+        name: id
+        type: integer
+        description: ID of the Post Bucket to update
+        required: true
+      - in: body
+        name: post
+        description: Updates a PickUp Post Bucket with supplied properties
+        schema:
+          type: object
+          required:
+            - title
+            - position
+          properties:
+            title:
+              type: string
+              example: 'J.J. Watts to the Cards!'
+            position: 
+              type: string
+              example: 'homepage'
+            updated_at:
+              type: string
+              example: '2021-04-20T19:37:20.531Z'
+            deleted_at:
+              type: string
+              example: '2021-04-20T19:37:20.531Z'
+      responses:
+        200:
+          description: 'Successfully updated bucket'
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Updated
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Bad Request
+                
+    delete:
+      description: Deletes a Post Bucket
+      consumes:
+        - application/json
+      parameters:
+      - in: query
+        name: token
+        type: string
+        description: Admin token
+        required: true
+      - in: query
+        name: id
+        type: integer
+        description: ID of the Post Bucket to delete
+        required: true
+      responses:
+        200:
+          description: 'Successfully deleted bucket'
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Deleted
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Bad Request
+        
+                  
   /posts:
     get:
       description: 'Returns a collection of PickUp Posts'
