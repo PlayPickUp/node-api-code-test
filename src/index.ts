@@ -23,6 +23,7 @@ import { httpErrorHandler } from './middleware/httpError.middleware';
 import { notFoundErrorHandler } from './middleware/notFoundError.middleware';
 import { publicCorsConfig } from './util/corsOptions';
 import eventsRouter from './routes/events.routes';
+import bucketsRouter from './routes/buckets.routes';
 
 const { NODE_ENV } = process.env;
 
@@ -66,29 +67,27 @@ passport.use(
 );
 
 passport.use(
-    'admintoken',
-    new Strategy(async function (token, done) {
-        if (token && token === process.env.ADMIN_TOKEN) {
-            return done(null, token);
-        } else {
-            return done(
-                new ForbiddenException('No valid admin access token provided')
-            );
-        }
-    })
+  'admintoken',
+  new Strategy(async function (token, done) {
+    if (token && token === process.env.ADMIN_TOKEN) {
+      return done(null, token);
+    } else {
+      return done(
+        new ForbiddenException('No valid admin access token provided')
+      );
+    }
+  })
 );
 
 passport.use(
-    'eventstoken',
-    new Strategy(async function (token, done) {
-        if (token && token === process.env.EVENT_LOGGER_TOKEN) {
-            return done(null, token);
-        } else {
-            return done(
-                new ForbiddenException('No valid event token provided')
-            );
-        }
-    })
+  'eventstoken',
+  new Strategy(async function (token, done) {
+    if (token && token === process.env.EVENT_LOGGER_TOKEN) {
+      return done(null, token);
+    } else {
+      return done(new ForbiddenException('No valid event token provided'));
+    }
+  })
 );
 
 // api routes
@@ -99,6 +98,7 @@ app.use('/v1', leaguesRouter);
 app.use('/v1', loginRouter);
 app.use('/v1', usersRouter);
 app.use('/v1', eventsRouter);
+app.use('/v1', bucketsRouter);
 
 // health check
 app.get('/health', cors(publicCorsConfig), (req: Request, res: Response) =>
