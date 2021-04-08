@@ -6,11 +6,27 @@ import { privateCorsConfig } from '../util/corsOptions';
 import {
   buckets,
   create,
-  update,
+  createBucketPost,
   del,
+  deleteBucketPost,
+  update,
 } from '../controllers/buckets.controller';
 
 const bucketsRouter = express.Router();
+
+bucketsRouter.post(
+  '/buckets-posts',
+  cors(privateCorsConfig),
+  passport.authenticate('admintoken', { session: false }),
+  async (req: Request, res: Response) => await createBucketPost(req, res)
+);
+
+bucketsRouter.delete(
+  '/buckets-posts',
+  cors(privateCorsConfig),
+  passport.authenticate('admintoken', { session: false }),
+  async (req: Request, res: Response) => await deleteBucketPost(req, res)
+);
 
 bucketsRouter.get(
   '/buckets',

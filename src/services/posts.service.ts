@@ -19,7 +19,8 @@ export interface GetPosts {
     id: string | undefined,
     article_url?: string | undefined,
     prop_id?: string | undefined,
-    league?: string | undefined
+    league?: string | undefined,
+    search?: string | undefined
   ): Promise<Post | Post[] | void>;
 }
 
@@ -36,13 +37,14 @@ export const getPosts: GetPosts = async (
   id,
   article_url,
   prop_id,
-  league
+  league,
+  search
 ) => {
   const posts: Post | Post[] = knex
     .select('*')
     .from('posts')
     .where((builder: QueryBuilder) => {
-      const query = { limit, offset, id, article_url, prop_id };
+      const query = { limit, offset, id, article_url, prop_id, search };
       const computedQuery: Record<string, string | number | undefined> = omitBy(
         query,
         (item) => {
@@ -52,10 +54,18 @@ export const getPosts: GetPosts = async (
           return false;
         }
       );
-      if (!league) {
+      if (!league && !search) {
         builder
           .where(omit(computedQuery, ['limit', 'offset']))
           .andWhere({ deleted_at: null });
+      } else if (search) {
+        builder
+          .where(omit(computedQuery, ['limit', 'offset', 'search', 'league']))
+          .where({ deleted_at: null })
+          .andWhere('post_title', 'like', `%${search}%`)
+          .orWhere('headline', 'like', `%${search}%`)
+          .where(omit(computedQuery, ['limit', 'offset', 'search', 'league']))
+          .where({ deleted_at: null });
       } else {
         builder
           .where(omit(computedQuery, ['limit', 'offset']))

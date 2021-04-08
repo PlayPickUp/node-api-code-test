@@ -1,13 +1,20 @@
 import knex from '../util/db';
-import { Bucket, BucketCreate } from '../models/buckets.model';
+import { Bucket, BucketCreate, BucketPost } from '../models/buckets.model';
 import { QueryBuilder } from 'knex';
 import omitBy from 'lodash/omitBy';
 import omit from 'lodash/omit';
+import assignIn from 'lodash/assignIn';
 import moment from 'moment';
+import { Post } from '../models/posts.model';
+import { posts } from '../controllers/posts.controller';
 
 type KnexError = { name: string; message: string };
 
 export type GetBuckets = (id: string) => Promise<Bucket[] | KnexError>;
+
+export type GetBucketPosts = (
+  bucket_id: string | number
+) => Promise<Post[] | KnexError>;
 
 export type CreateBucket = (
   body: BucketCreate
@@ -22,8 +29,18 @@ export type DeleteBucket = (
   id: string | number
 ) => Promise<Array<{ id: string | number }> | KnexError>;
 
+export type DelBucketPost = (
+  id: string | number
+) => Promise<Array<{ id: string | number }> | KnexError>;
+
+export type AddBucketPost = (body: BucketPost) => Promise<string | KnexError>;
+
 // Get Buckets
-export const getBuckets: GetBuckets = async (id, limit = 25, offset = 0) => {
+export const getBuckets = async (
+  id?: string | number,
+  limit = 25,
+  offset = 0
+): Promise<Bucket[] | void> => {
   const query = { id, limit, offset };
   const buckets = await knex
     .select('*')
@@ -50,7 +67,19 @@ export const getBuckets: GetBuckets = async (id, limit = 25, offset = 0) => {
   } else if (buckets.name === 'Error') {
     throw new Error(buckets.message);
   }
-  return buckets;
+
+  const attachedPosts = async (): Promise<Bucket[]> =>
+    await Promise.all(
+      buckets.map(async (bucket: Bucket) => {
+        const posts = await getBucketPosts(bucket.id);
+        const expandedBucket = assignIn(bucket, { posts });
+        return expandedBucket;
+      })
+    );
+
+  return await attachedPosts().catch((err) => {
+    throw err;
+  });
 };
 
 // Create Bucket
@@ -110,4 +139,61 @@ export const deleteBucket: DeleteBucket = async (id) => {
     throw new Error(bucket.message);
   }
   return bucket;
+};
+
+// Add Bucket + Post Record
+export const addBucketPost: AddBucketPost = async (body) => {
+  const bucketsPosts = await knex('buckets_posts')
+    .insert({ ...body })
+    .catch((err: string) => {
+      throw err;
+    });
+
+  if (!bucketsPosts)
+    throw new Error('Could not create buckets_posts relationship');
+
+  if (bucketsPosts.name === 'Error') {
+    throw new Error(bucketsPosts.message);
+  }
+  return bucketsPosts;
+};
+
+// Get Posts Attached to Buckets
+export const getBucketPosts: GetBucketPosts = async (bucket_id) => {
+  const posts = await knex('buckets_posts').select().where({
+    bucket_id,
+    deleted_at: null,
+  });
+
+  if (!posts)
+    throw new Error(
+      `Could not get posts associated with bucket_id: ${bucket_id}`
+    );
+
+  if (posts.name === 'Error') {
+    throw new Error(posts.message);
+  }
+
+  return posts;
+};
+
+// Delete Post Attached to Bucket
+export const delBucketPost: DelBucketPost = async (id) => {
+  const post = await knex('buckets_posts')
+    .select()
+    .where({ id })
+    .update({
+      deleted_at: moment().toISOString(),
+    })
+    .returning(['id']);
+
+  if (!post) {
+    throw new Error(`Could not remove post`);
+  }
+
+  if (posts.name === 'Error') {
+    throw new Error(post.message);
+  }
+
+  return post;
 };

@@ -21,3 +21,14 @@ export interface BucketCreate {
   position: Position;
   created_by_id: CreatedBy;
 }
+
+export interface BucketPost {
+  id?: string | number;
+  bucket_id: string | number;
+  post_id: string | number;
+  deleted_at?: Date | null;
+}
+
+export interface BucketPayload extends Bucket {
+  posts: BucketPost[];
+}

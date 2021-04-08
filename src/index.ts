@@ -40,7 +40,9 @@ Sentry.init({
   tracesSampleRate: NODE_ENV !== 'production' ? 1.0 : 0.5,
 });
 
-app.use(morgan('combined'));
+if (NODE_ENV === 'production') {
+  app.use(morgan('combined'));
+}
 app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 app.use(helmet());
