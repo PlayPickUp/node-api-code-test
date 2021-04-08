@@ -68,7 +68,7 @@ export const getPosts: GetPosts = async (
           .where({ deleted_at: null });
       } else {
         builder
-          .where(omit(computedQuery, ['limit', 'offset']))
+          .where(omit(computedQuery, ['limit', 'offset', 'search']))
           .andWhere(knex.raw(`league->>'leagues' like ?`, [league]))
           .andWhere({ deleted_at: null });
       }
