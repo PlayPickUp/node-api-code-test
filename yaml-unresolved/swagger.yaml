@@ -176,10 +176,10 @@ paths:
             type: array
             items:
               type: object
-              properties:
-                count:
+              properties: 
+                count: 
                   type: string
-                  example: '23'
+                  example: "23"
         403:
           description: Permission Denied
           schema:
@@ -220,7 +220,7 @@ paths:
                   type: string
                   example: headshot.jpg
   /buckets:
-    get:
+    get: 
       description: Gets a collection of Post Bukcets
       parameters:
         - in: query
@@ -241,7 +241,7 @@ paths:
           description: 'Successfully returned collection of Post Buckets'
           schema:
             type: array
-            items:
+            items: 
               type: object
               properties:
                 id:
@@ -249,7 +249,7 @@ paths:
                   example: 23
                 title:
                   type: string
-                  example: 'J.J. Watt to the Cards!'
+                  example: "J.J. Watt to the Cards!"
                 position:
                   type: string
                   example: 'homepage'
@@ -270,7 +270,7 @@ paths:
           description: Bad request, did you pass an access token?
           schema:
             type: object
-            properties:
+            properties: 
               message:
                 type: string
                 example: 'Bad Request'
@@ -279,32 +279,32 @@ paths:
       consumes:
         - application/json
       parameters:
-        - in: query
-          name: token
-          type: string
-          description: Admin token
-          required: true
-        - in: body
-          name: post
-          description: Creates a PickUp Post Bucket with supplied properties
-          schema:
-            type: object
-            required:
-              - title
-              - position
-            properties:
-              title:
-                type: string
-                example: 'J.J. Watts to the Cards!'
-              position:
-                type: string
-                example: 'homepage'
-              updated_at:
-                type: string
-                example: '2021-04-20T19:37:20.531Z'
-              deleted_at:
-                type: string
-                example: '2021-04-20T19:37:20.531Z'
+      - in: query
+        name: token
+        type: string
+        description: Admin token
+        required: true
+      - in: body
+        name: post
+        description: Creates a PickUp Post Bucket with supplied properties
+        schema:
+          type: object
+          required:
+            - title
+            - position
+          properties:
+            title:
+              type: string
+              example: 'J.J. Watts to the Cards!'
+            position: 
+              type: string
+              example: 'homepage'
+            updated_at:
+              type: string
+              example: '2021-04-20T19:37:20.531Z'
+            deleted_at:
+              type: string
+              example: '2021-04-20T19:37:20.531Z'
       responses:
         201:
           description: 'Successfully created bucket'
@@ -325,43 +325,43 @@ paths:
               message:
                 type: string
                 example: Bad Request
-
+                
     put:
       description: Updates a Post Bucket
       consumes:
         - application/json
       parameters:
-        - in: query
-          name: token
-          type: string
-          description: Admin token
-          required: true
-        - in: query
-          name: id
-          type: integer
-          description: ID of the Post Bucket to update
-          required: true
-        - in: body
-          name: post
-          description: Updates a PickUp Post Bucket with supplied properties
-          schema:
-            type: object
-            required:
-              - title
-              - position
-            properties:
-              title:
-                type: string
-                example: 'J.J. Watts to the Cards!'
-              position:
-                type: string
-                example: 'homepage'
-              updated_at:
-                type: string
-                example: '2021-04-20T19:37:20.531Z'
-              deleted_at:
-                type: string
-                example: '2021-04-20T19:37:20.531Z'
+      - in: query
+        name: token
+        type: string
+        description: Admin token
+        required: true
+      - in: query
+        name: id
+        type: integer
+        description: ID of the Post Bucket to update
+        required: true
+      - in: body
+        name: post
+        description: Updates a PickUp Post Bucket with supplied properties
+        schema:
+          type: object
+          required:
+            - title
+            - position
+          properties:
+            title:
+              type: string
+              example: 'J.J. Watts to the Cards!'
+            position: 
+              type: string
+              example: 'homepage'
+            updated_at:
+              type: string
+              example: '2021-04-20T19:37:20.531Z'
+            deleted_at:
+              type: string
+              example: '2021-04-20T19:37:20.531Z'
       responses:
         200:
           description: 'Successfully updated bucket'
@@ -379,22 +379,22 @@ paths:
               message:
                 type: string
                 example: Bad Request
-
+                
     delete:
       description: Deletes a Post Bucket
       consumes:
         - application/json
       parameters:
-        - in: query
-          name: token
-          type: string
-          description: Admin token
-          required: true
-        - in: query
-          name: id
-          type: integer
-          description: ID of the Post Bucket to delete
-          required: true
+      - in: query
+        name: token
+        type: string
+        description: Admin token
+        required: true
+      - in: query
+        name: id
+        type: integer
+        description: ID of the Post Bucket to delete
+        required: true
       responses:
         200:
           description: 'Successfully deleted bucket'
@@ -412,7 +412,7 @@ paths:
               message:
                 type: string
                 example: Bad Request
-
+  
   /buckets-posts:
     post:
       description: 'Creates post association with a specific Bucket'
@@ -443,7 +443,7 @@ paths:
       responses:
         200:
           description: 'Successfully attached post to bucket'
-          schema:
+          schema: 
             type: object
             properties:
               message:
@@ -451,7 +451,7 @@ paths:
                 example: Created
         400:
           description: 'Could not attach post to bucket'
-          schema:
+          schema: 
             type: object
             properties:
               message:
@@ -476,7 +476,7 @@ paths:
       responses:
         200:
           description: 'Successfully removed post from bucket'
-          schema:
+          schema: 
             type: object
             properties:
               message:
@@ -484,13 +484,13 @@ paths:
                 example: Deleted
         400:
           description: 'Could not dettach post from bucket'
-          schema:
+          schema: 
             type: object
             properties:
               message:
                 type: string
                 example: Bad Request
-
+                  
   /posts:
     get:
       description: 'Returns a collection of PickUp Posts'
@@ -724,6 +724,54 @@ paths:
               message:
                 type: string
                 example: 'Forbidden'
+                
+  /picks:
+    get:
+      description: Gets picks from the database (picks have a many relationship to props)
+      parameters:
+        - in: query
+          name: token
+          description: Admin token
+          type: string
+          required: true
+        - in: query
+          name: prop_id
+          description: Filters picks by prop_id
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: integer
+                  example: 2323
+                title:
+                  type: string
+                  example: 'Celtics beat the Bucks on 3/24'
+                created_at:
+                  type: string
+                  example: '2021-03-20 01:08:25.530295'
+                updated_at:
+                  type: string
+                  example: '2021-03-20 01:08:25.530295'
+                state:
+                  type: string
+                  example: 'pending'
+                fan_picks_count:
+                  type: number
+                  example: 51
+                user_id:
+                  type: number
+                  example: 2
+                graded_at:
+                  type: string
+                  example: '2021-03-13 18:13:58.140031'
+    
+    
 
 # Added by API Auto Mocking Plugin
 # host: api.playpickup.com
