@@ -38,10 +38,11 @@ export type AddBucketPost = (body: BucketPost) => Promise<string | KnexError>;
 // Get Buckets
 export const getBuckets = async (
   id?: string | number,
+  position?: string,
   limit = 25,
   offset = 0
 ): Promise<Bucket[] | void> => {
-  const query = { id, limit, offset };
+  const query = { id, limit, offset, position };
   const buckets = await knex
     .select('*')
     .from('buckets')

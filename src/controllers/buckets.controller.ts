@@ -18,9 +18,10 @@ export const buckets = async (
   const { query } = req;
 
   const id = query.id as string;
+  const position = query.position as string;
 
   try {
-    const buckets = await getBuckets(id);
+    const buckets = await getBuckets(id, position);
     if (!buckets) throw new Error('Could not get buckets!');
 
     return res.json(buckets);
