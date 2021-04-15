@@ -2,8 +2,6 @@
 
 ![Build](https://github.com/PlayPickUp/pickup-node-api/workflows/Build/badge.svg?branch=master)
 
-> ### ⚠ Note: All routes are currently disabled
-
 ## Props
 
 ### GET `/api/v1/props`
