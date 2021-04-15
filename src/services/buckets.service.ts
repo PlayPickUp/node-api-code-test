@@ -39,7 +39,7 @@ export type AddBucketPost = (body: BucketPost) => Promise<string | KnexError>;
 export const getBuckets = async (
   id?: string | number,
   position?: string,
-  limit = 25,
+  limit = 75,
   offset = 0
 ): Promise<Bucket[] | void> => {
   const query = { id, limit, offset, position };
