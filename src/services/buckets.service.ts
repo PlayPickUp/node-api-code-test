@@ -60,6 +60,7 @@ export const getBuckets = async (
         .where(omit(computedQuery, ['limit', 'offset']))
         .andWhere({ deleted_at: null });
     })
+    .orderBy('id', 'desc')
     .catch((err: string) => {
       throw err;
     });
@@ -161,10 +162,13 @@ export const addBucketPost: AddBucketPost = async (body) => {
 
 // Get Posts Attached to Buckets
 export const getBucketPosts: GetBucketPosts = async (bucket_id) => {
-  const posts = await knex('buckets_posts').select().where({
-    bucket_id,
-    deleted_at: null,
-  });
+  const posts = await knex('buckets_posts')
+    .select()
+    .where({
+      bucket_id,
+      deleted_at: null,
+    })
+    .orderBy('id', 'desc');
 
   if (!posts)
     throw new Error(
