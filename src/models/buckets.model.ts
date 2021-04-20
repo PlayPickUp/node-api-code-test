@@ -20,6 +20,7 @@ export interface BucketCreate {
   title: Title;
   position: Position;
   created_by_id: CreatedBy;
+  order?: number;
 }
 
 export interface BucketPost {

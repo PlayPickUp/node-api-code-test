@@ -9,6 +9,7 @@ import {
   createBucketPost,
   del,
   deleteBucketPost,
+  patchBucketPost,
   update,
 } from '../controllers/buckets.controller';
 
@@ -19,6 +20,13 @@ bucketsRouter.post(
   cors(privateCorsConfig),
   passport.authenticate('admintoken', { session: false }),
   async (req: Request, res: Response) => await createBucketPost(req, res)
+);
+
+bucketsRouter.patch(
+  '/buckets-posts',
+  cors(privateCorsConfig),
+  passport.authenticate('admintoken', { session: false }),
+  async (req: Request, res: Response) => await patchBucketPost(req, res)
 );
 
 bucketsRouter.delete(

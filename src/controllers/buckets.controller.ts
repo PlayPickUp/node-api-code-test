@@ -6,6 +6,7 @@ import {
   delBucketPost,
   getBuckets,
   updateBucket,
+  updateBucketPost,
 } from '../services/buckets.service';
 import head from 'lodash/head';
 
@@ -101,6 +102,23 @@ export const createBucketPost = async (
     const bucketPost = await addBucketPost(body);
     if (!bucketPost) throw new Error('Could not add new bucket-post record');
     return res.json({ message: 'Created' });
+  } catch (err) {
+    console.error(err);
+    return res.sendStatus(500).send(err);
+  }
+};
+
+export const patchBucketPost = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { body } = req;
+  const post_id = req.query.post_id as string;
+
+  try {
+    const bucketPost = await updateBucketPost(post_id, body);
+    if (!bucketPost) throw new Error('Could not update bucket-post record');
+    return res.json({ message: 'Updated' });
   } catch (err) {
     console.error(err);
     return res.sendStatus(500).send(err);

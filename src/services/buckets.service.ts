@@ -20,6 +20,11 @@ export type CreateBucket = (
   body: BucketCreate
 ) => Promise<Array<{ id: string | number }> | KnexError>;
 
+export type UpdateBucketPost = (
+  id: number | string,
+  body: BucketCreate
+) => Promise<Array<{ id: string | number }> | KnexError>;
+
 export type UpdateBucket = (
   id: string | number,
   body: BucketCreate
@@ -168,7 +173,7 @@ export const getBucketPosts: GetBucketPosts = async (bucket_id) => {
       bucket_id,
       deleted_at: null,
     })
-    .orderBy('id', 'desc');
+    .orderBy('order', 'asc');
 
   if (!posts)
     throw new Error(
@@ -180,6 +185,24 @@ export const getBucketPosts: GetBucketPosts = async (bucket_id) => {
   }
 
   return posts;
+};
+
+// update a bucket-post record
+export const updateBucketPost: UpdateBucketPost = async (post_id, body) => {
+  const bucketPost = await knex('buckets_posts')
+    .where({ post_id })
+    .update({ ...body })
+    .returning(['id']);
+
+  if (!bucketPost) {
+    throw new Error('Could not update bucket_post record!');
+  }
+
+  if (getBucketPosts.name === 'Error') {
+    throw new Error(bucketPost.message);
+  }
+
+  return bucketPost;
 };
 
 // Delete Post Attached to Bucket
