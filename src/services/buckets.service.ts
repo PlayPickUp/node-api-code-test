@@ -20,6 +20,11 @@ export type CreateBucket = (
   body: BucketCreate
 ) => Promise<Array<{ id: string | number }> | KnexError>;
 
+export type UpdateBucketPost = (
+  id: number | string,
+  body: BucketCreate
+) => Promise<Array<{ id: string | number }> | KnexError>;
+
 export type UpdateBucket = (
   id: string | number,
   body: BucketCreate
@@ -38,10 +43,11 @@ export type AddBucketPost = (body: BucketPost) => Promise<string | KnexError>;
 // Get Buckets
 export const getBuckets = async (
   id?: string | number,
-  limit = 25,
+  position?: string,
+  limit = 75,
   offset = 0
 ): Promise<Bucket[] | void> => {
-  const query = { id, limit, offset };
+  const query = { id, limit, offset, position };
   const buckets = await knex
     .select('*')
     .from('buckets')
@@ -59,6 +65,7 @@ export const getBuckets = async (
         .where(omit(computedQuery, ['limit', 'offset']))
         .andWhere({ deleted_at: null });
     })
+    .orderBy('id', 'desc')
     .catch((err: string) => {
       throw err;
     });
@@ -160,10 +167,13 @@ export const addBucketPost: AddBucketPost = async (body) => {
 
 // Get Posts Attached to Buckets
 export const getBucketPosts: GetBucketPosts = async (bucket_id) => {
-  const posts = await knex('buckets_posts').select().where({
-    bucket_id,
-    deleted_at: null,
-  });
+  const posts = await knex('buckets_posts')
+    .select()
+    .where({
+      bucket_id,
+      deleted_at: null,
+    })
+    .orderBy('order', 'asc');
 
   if (!posts)
     throw new Error(
@@ -175,6 +185,24 @@ export const getBucketPosts: GetBucketPosts = async (bucket_id) => {
   }
 
   return posts;
+};
+
+// update a bucket-post record
+export const updateBucketPost: UpdateBucketPost = async (post_id, body) => {
+  const bucketPost = await knex('buckets_posts')
+    .where({ post_id })
+    .update({ ...body })
+    .returning(['id']);
+
+  if (!bucketPost) {
+    throw new Error('Could not update bucket_post record!');
+  }
+
+  if (getBucketPosts.name === 'Error') {
+    throw new Error(bucketPost.message);
+  }
+
+  return bucketPost;
 };
 
 // Delete Post Attached to Bucket
