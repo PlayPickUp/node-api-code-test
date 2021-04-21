@@ -1,4 +1,4 @@
-import {Fan} from "./fans.model";
+import { Fan } from './fans.model';
 
 export interface Prize {
   id: number;
@@ -13,8 +13,8 @@ export interface Prize {
 }
 
 export enum PrizeStatus {
-  Available= "Available Now",
-  ComingSoon= "Coming Soon"
+  Available = 'Available Now',
+  ComingSoon = 'Coming Soon',
 }
 
 export interface PrizeCode {
@@ -36,19 +36,19 @@ export interface CreatePrizeRequest {
 }
 
 export interface CreatePrizeCodesRequest {
-  codes: string[]
-  prize_id: number
+  codes: string[];
+  prize_id: number;
   expiration_date: Date | null;
 }
 
 export interface CreatePrizeCodesResponse {
-  created: number
-  failed: string[]
+  created: number;
+  failed: string[];
 }
 
 export interface RedeemPrizeCodesResponse {
-  assignedToFan: boolean
-  emailSent: boolean
+  assignedToFan: boolean;
+  emailSent: boolean;
 }
 
 export interface RedeemPrizeCodesRequest {

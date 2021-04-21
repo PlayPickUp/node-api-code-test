@@ -24,7 +24,7 @@ import { notFoundErrorHandler } from './middleware/notFoundError.middleware';
 import { publicCorsConfig } from './util/corsOptions';
 import eventsRouter from './routes/events.routes';
 import bucketsRouter from './routes/buckets.routes';
-import prizesRouter from "./routes/prizes.routes";
+import prizesRouter from './routes/prizes.routes';
 import statsRouter from './routes/stats.routes';
 
 const { NODE_ENV } = process.env;
