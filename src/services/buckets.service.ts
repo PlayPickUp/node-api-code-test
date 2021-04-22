@@ -111,7 +111,7 @@ export const createBucket: CreateBucket = async (body) => {
 export const updateBucket: UpdateBucket = async (id, body) => {
   const { title, position, created_by_id } = body;
   const bucket = await knex('buckets')
-    .select({ id })
+    .where({ id })
     .update({
       title,
       position,
