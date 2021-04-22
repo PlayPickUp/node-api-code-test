@@ -270,23 +270,30 @@ const sendPrizeCodeEmail = async (prizeCode: PrizeCode, fan: Fan) => {
   const imageSource =
     'https://bwipjs-api.metafloor.com/?bcid=code128&text=' + prizeCode.code;
   const emailBody = `
+<div>
     <span>Hey ${fan.username}!</span>
     <br/>
     <span>You've successfully redeemed your points for a Free Game of Bowling at Bowlero!</span>
-    Show this barcode at any participating Bowlero to get started! 
-    
-    Thanks for Playing PickUp!
+    <br/>
+    <span>Please visit <a href="https://www.bowlero.com/locations?radius=25">https://www.bowlero.com/locations?radius=25</a> 
+    to find your nearest Bowlero Corp location, print out or pull up the voucher's bar code on your smart phone and 
+    redeem upon arrival.</span>
+    <br/>
+    <span>Restriction: Voucher may not be redeemed on Saturdays.</span>
+    <br/>
+    <span>Thanks for Playing PickUp!</span>
     <br/>
     <div style="background: white">
     <img src=${imageSource} />
     </div>
-    <br/>`;
+    <br/>
+</div>`;
   try {
     sgMail.setApiKey(SENDGRID_API_KEY);
     const msg = {
       to: fan.email,
       from: 'marketplace@playpickup.com',
-      subject: 'Your Pickup Marketplace Prize From Bowlero Is Here!',
+      subject: 'Your PickUp Marketplace Prize From Bowlero Is Here!',
       html: emailBody,
     };
     await sgMail.send(msg);

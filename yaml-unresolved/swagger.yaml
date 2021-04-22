@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.5.0
+  version: 0.9.0
   title: PickUp Node API
   description: PickUp's Node API
 paths:
@@ -371,6 +371,9 @@ paths:
               message:
                 type: string
                 example: Updated
+              id:
+                type: integer
+                example: 23
         400:
           description: Bad Request
           schema:
