@@ -71,7 +71,11 @@ export const update = async (
     const bucket = await updateBucket(id as string, body);
     if (!bucket) throw new Error('Could not update bucket!');
 
-    return res.json({ message: 'Updated' });
+    const data: { id: string | number } | undefined = head(
+      bucket as Array<{ id: string | number }>
+    ) as { id: string | number };
+
+    return res.json({ message: 'Updated', id: data.id });
   } catch (err) {
     console.error(err);
     return res.sendStatus(500).send(err);
