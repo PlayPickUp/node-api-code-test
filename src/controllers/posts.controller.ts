@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import split from 'lodash/split';
+import isArray from 'lodash/isArray';
+import axios from 'axios';
 
 import {
   createPost,
@@ -8,6 +10,9 @@ import {
   patchPost,
   updatePost,
 } from '../services/posts.service';
+import { makeSlug } from '../helpers/posts/slug.helper';
+
+const { PRERENDER_TOKEN, NODE_ENV } = process.env;
 
 export const posts = async (req: Request, res: Response): Promise<Response> => {
   const { query } = req;
@@ -46,6 +51,33 @@ export const create = async (
   try {
     const post = await createPost(body);
     if (!post) throw new Error('Could not create post!');
+
+    // send API request to prerender.io to cache the new post, only on prod
+    // if (NODE_ENV === 'production') {
+    const handleLeagueValue = (league: string | string[]) => {
+      if (isArray(league)) {
+        return league[0];
+      } else {
+        const leagueArray = league.split(',');
+        return leagueArray[0];
+      }
+    };
+    const handlePostSlug = (title: string) => makeSlug(title);
+    const postUrl =
+      `/news/${handleLeagueValue(post.league.leagues)}` +
+      `/${handlePostSlug(post.post_title)}-${post.id}`;
+
+    await axios.post(
+      'https://api.prerender.io/recache',
+      {},
+      {
+        params: {
+          prerenderToken: PRERENDER_TOKEN,
+          url: `https://playpickup.com${postUrl}`,
+        },
+      }
+    );
+    // }
 
     return res.json({ message: 'Created' });
   } catch (err) {
