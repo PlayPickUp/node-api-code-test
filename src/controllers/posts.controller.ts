@@ -53,31 +53,35 @@ export const create = async (
     if (!post) throw new Error('Could not create post!');
 
     // send API request to prerender.io to cache the new post, only on prod
-    // if (NODE_ENV === 'production') {
-    const handleLeagueValue = (league: string | string[]) => {
-      if (isArray(league)) {
-        return league[0];
-      } else {
-        const leagueArray = league.split(',');
-        return leagueArray[0];
-      }
-    };
-    const handlePostSlug = (title: string) => makeSlug(title);
-    const postUrl =
-      `/news/${handleLeagueValue(post.league.leagues)}` +
-      `/${handlePostSlug(post.post_title)}-${post.id}`;
+    if (NODE_ENV === 'production') {
+      try {
+        const handleLeagueValue = (league: string | string[]) => {
+          if (isArray(league)) {
+            return league[0];
+          } else {
+            const leagueArray = league.split(',');
+            return leagueArray[0];
+          }
+        };
+        const handlePostSlug = (title: string) => makeSlug(title);
+        const postUrl =
+          `/news/${handleLeagueValue(post.league.leagues)}` +
+          `/${handlePostSlug(post.post_title)}-${post.id}`;
 
-    await axios.post(
-      'https://api.prerender.io/recache',
-      {},
-      {
-        params: {
-          prerenderToken: PRERENDER_TOKEN,
-          url: `https://playpickup.com${postUrl}`,
-        },
+        await axios
+          .post('https://api.prerender.io/recache', {
+            prerenderToken: PRERENDER_TOKEN,
+            url: `https://playpickup.com${postUrl}`,
+          })
+          .then((response) => {
+            if (response.status !== 200)
+              throw new Error('Prerender threw a non 200 status code');
+          })
+          .catch((err) => console.error(err));
+      } catch (err) {
+        console.error(err);
       }
-    );
-    // }
+    }
 
     return res.json({ message: 'Created' });
   } catch (err) {

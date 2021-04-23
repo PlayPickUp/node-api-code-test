@@ -135,7 +135,7 @@ export const createPost = async (body: PostCreate): Promise<Post | void> => {
             publisher_source_url:
               meta?.source_url || publisher_source_url || '',
           })
-          .returning(['id', 'featured_img'])
+          .returning('*')
           .catch((err: string) => {
             throw new Error(err);
           });
