@@ -3,6 +3,7 @@ import split from 'lodash/split';
 import isArray from 'lodash/isArray';
 import axios from 'axios';
 
+import { delBucketPostRelation } from '../services/buckets.service';
 import {
   createPost,
   deletePost,
@@ -131,6 +132,17 @@ export const del = async (req: Request, res: Response): Promise<Response> => {
   const idPayload = split(id as string, ',');
 
   try {
+    // remove any deleted posts from buckets
+    await Promise.all(
+      idPayload.map(async (id) => {
+        await delBucketPostRelation(id);
+      })
+    );
+  } catch (err) {
+    console.error('Could not remove bucket_post relation: ', err);
+  }
+
+  try {
     const failedDeletes: string[] = [];
     for (const postId of idPayload) {
       const response = await deletePost(postId as string);
@@ -143,6 +155,7 @@ export const del = async (req: Request, res: Response): Promise<Response> => {
           failedDeletes,
       });
     }
+
     return res.json({ message: 'Deleted' });
   } catch (err) {
     console.error(err);

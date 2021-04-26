@@ -38,6 +38,10 @@ export type DelBucketPost = (
   id: string | number
 ) => Promise<Array<{ id: string | number }> | KnexError>;
 
+export type DelBucketPostRelation = (
+  post_id: string | number
+) => Promise<void | KnexError>;
+
 export type AddBucketPost = (body: BucketPost) => Promise<string | KnexError>;
 
 // Get Buckets
@@ -225,4 +229,14 @@ export const delBucketPost: DelBucketPost = async (id) => {
   }
 
   return post;
+};
+
+// delete attached BucketPost on Post Deletion
+export const delBucketPostRelation: DelBucketPostRelation = async (post_id) => {
+  await knex('buckets_posts')
+    .where({ post_id })
+    .update({ deleted_at: moment().toISOString() })
+    .catch((err: Error) => {
+      throw err;
+    });
 };
