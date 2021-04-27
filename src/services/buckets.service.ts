@@ -22,6 +22,7 @@ export type CreateBucket = (
 
 export type UpdateBucketPost = (
   id: number | string,
+  bucket_id: string | number,
   body: BucketCreate
 ) => Promise<Array<{ id: string | number }> | KnexError>;
 
@@ -193,9 +194,13 @@ export const getBucketPosts: GetBucketPosts = async (bucket_id) => {
 };
 
 // update a bucket-post record
-export const updateBucketPost: UpdateBucketPost = async (post_id, body) => {
+export const updateBucketPost: UpdateBucketPost = async (
+  post_id,
+  bucket_id,
+  body
+) => {
   const bucketPost = await knex('buckets_posts')
-    .where({ post_id })
+    .where({ post_id, bucket_id })
     .update({ ...body })
     .returning(['id']);
 
