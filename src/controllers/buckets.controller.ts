@@ -118,9 +118,10 @@ export const patchBucketPost = async (
 ): Promise<Response> => {
   const { body } = req;
   const post_id = req.query.post_id as string;
+  const bucket_id = req.query.bucket_id as string;
 
   try {
-    const bucketPost = await updateBucketPost(post_id, body);
+    const bucketPost = await updateBucketPost(post_id, bucket_id, body);
     if (!bucketPost) throw new Error('Could not update bucket-post record');
     return res.json({ message: 'Updated' });
   } catch (err) {
