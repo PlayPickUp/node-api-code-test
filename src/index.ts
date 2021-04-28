@@ -39,7 +39,7 @@ Sentry.init({
     new Sentry.Integrations.Http({ tracing: true }),
     new Tracing.Integrations.Express({ app }),
   ],
-  tracesSampleRate: NODE_ENV !== 'production' ? 1.0 : 0.5,
+  tracesSampleRate: NODE_ENV !== 'production' ? 0 : 0.01,
 });
 
 if (NODE_ENV === 'production') {
