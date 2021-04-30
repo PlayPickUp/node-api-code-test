@@ -62,8 +62,8 @@ export const getPosts: GetPosts = async (
         builder
           .where(omit(computedQuery, ['limit', 'offset', 'search', 'league']))
           .where({ deleted_at: null })
-          .andWhere('post_title', 'like', `%${search}%`)
-          .orWhere('headline', 'like', `%${search}%`)
+          .andWhere('post_title', 'ilike', `%${search}%`)
+          .orWhere('headline', 'ilike', `%${search}%`)
           .where(omit(computedQuery, ['limit', 'offset', 'search', 'league']))
           .where({ deleted_at: null });
       } else {
