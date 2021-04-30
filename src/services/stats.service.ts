@@ -11,6 +11,7 @@ interface PostPublish {
 export const postsByDay = async (): Promise<Record<string, number>[]> => {
   const posts = await knex('posts')
     .select('id', 'published_at')
+    .whereNot({ publisher_id: null })
     .orderBy('published_at', 'asc');
 
   if (!posts) {
