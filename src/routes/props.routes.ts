@@ -1,6 +1,10 @@
 import express, { NextFunction, Request, Response } from 'express';
 import cors from 'cors';
-import { closingProps, props } from '../controllers/props.controller';
+import {
+  closingProps,
+  props,
+  propState,
+} from '../controllers/props.controller';
 import { publicCorsConfig } from '../util/corsOptions';
 
 const propsRouter = express.Router();
@@ -16,6 +20,11 @@ propsRouter.get('/', (req: Request, res: Response) => res.sendStatus(403));
 propsRouter.get(
   '/props',
   async (req: Request, res: Response) => await props(req, res)
+);
+
+propsRouter.get(
+  '/props/state',
+  async (req: Request, res: Response) => await propState(req, res)
 );
 
 propsRouter.get(

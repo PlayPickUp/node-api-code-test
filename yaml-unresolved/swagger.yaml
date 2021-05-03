@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.12.0
+  version: 0.14.0
   title: PickUp Node API
   description: PickUp's Node API
 paths:
@@ -131,6 +131,40 @@ paths:
               code:
                 type: integer
                 example: 0
+
+  /publishers/posts:
+    delete:
+      description: Deletes a homebase post created by the requesting publisher, publishers can only delete their own posts
+      parameters:
+        - in: query
+          name: token
+          description: Publisher Access Token
+          type: string
+        - in: query
+          name: publisher_id
+          description: Publisher ID
+          type: integer
+        - in: query
+          name: post_id
+          description: Post ID to delete
+          type: integer
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: Deleted
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Bad Request'
 
   /leagues:
     get:
