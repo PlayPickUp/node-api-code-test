@@ -21,7 +21,7 @@ export interface GetPosts {
     prop_id?: string | undefined,
     league?: string | undefined,
     search?: string | undefined
-  ): Promise<Post | Post[] | void>;
+  ): Promise<Post[] | void>;
 }
 
 export interface PublisherMeta {
@@ -40,7 +40,7 @@ export const getPosts: GetPosts = async (
   league,
   search
 ) => {
-  const posts: Post | Post[] = knex
+  const posts: Post[] = knex
     .select('*')
     .from('posts')
     .where((builder: QueryBuilder) => {

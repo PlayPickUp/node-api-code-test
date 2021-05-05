@@ -12,6 +12,7 @@ import {
   updatePost,
 } from '../services/posts.service';
 import { makeSlug } from '../helpers/posts/slug.helper';
+import { Post } from '../models/posts.model';
 
 const { PRERENDER_TOKEN, NODE_ENV } = process.env;
 
@@ -36,8 +37,17 @@ export const posts = async (req: Request, res: Response): Promise<Response> => {
       league,
       search
     );
+
     if (!posts) throw new Error('Could not get posts from database!');
-    return res.json(posts);
+    const transformedPosts = posts.map((post: Post) => {
+      const postWithSlug = {
+        ...post,
+        slug: makeSlug(post.post_title) + `-${post.id}`,
+      };
+      return postWithSlug;
+    });
+
+    return res.json(transformedPosts);
   } catch (err) {
     console.error(err);
     return res.sendStatus(500).send(err);

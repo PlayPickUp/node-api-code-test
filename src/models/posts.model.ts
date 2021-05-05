@@ -27,6 +27,7 @@ interface PostBody {
   publisher_id: PublisherID;
   publisher_source_url: PublisherSourceURL;
   publisher_logo: PublisherLogo;
+  slug?: string;
 }
 
 export interface Post extends PostBody {
