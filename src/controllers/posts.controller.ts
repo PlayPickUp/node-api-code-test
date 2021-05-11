@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import split from 'lodash/split';
-import isArray from 'lodash/isArray';
 import axios from 'axios';
 
 import { delBucketPostRelation } from '../services/buckets.service';
@@ -12,6 +11,7 @@ import {
   updatePost,
 } from '../services/posts.service';
 import { makeSlug } from '../helpers/posts/slug.helper';
+import { handleLeagueValue } from '../helpers/posts/post.helper';
 import { Post } from '../models/posts.model';
 
 const { PRERENDER_TOKEN, NODE_ENV } = process.env;
@@ -40,9 +40,11 @@ export const posts = async (req: Request, res: Response): Promise<Response> => {
 
     if (!posts) throw new Error('Could not get posts from database!');
     const transformedPosts = posts.map((post: Post) => {
+      const postSlug = makeSlug(post.post_title);
+      const postLeague = handleLeagueValue(post.league.leagues);
       const postWithSlug = {
         ...post,
-        slug: makeSlug(post.post_title) + `-${post.id}`,
+        slug: `${postLeague}/${postSlug}-${post.id}`,
       };
       return postWithSlug;
     });
@@ -66,18 +68,9 @@ export const create = async (
     // send API request to prerender.io to cache the new post, only on prod
     if (NODE_ENV === 'production') {
       try {
-        const handleLeagueValue = (league: string | string[]) => {
-          if (isArray(league)) {
-            return league[0];
-          } else {
-            const leagueArray = league.split(',');
-            return leagueArray[0];
-          }
-        };
-        const handlePostSlug = (title: string) => makeSlug(title);
-        const postUrl =
-          `/news/${handleLeagueValue(post.league.leagues)}` +
-          `/${handlePostSlug(post.post_title)}-${post.id}`;
+        const postSlug = makeSlug(post.post_title);
+        const postLeague = handleLeagueValue(post.league.leagues);
+        const postUrl = `/news/${postLeague}/${postSlug}-${post.id}`;
 
         await axios
           .post('https://api.prerender.io/recache', {
