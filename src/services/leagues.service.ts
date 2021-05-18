@@ -8,12 +8,12 @@ export const getLeagues = (): Leagues => {
       label: 'Boxing',
     },
     {
-      value: 'cbb',
-      label: 'CBB',
+      value: 'ncaab',
+      label: 'NCAAB',
     },
     {
-      value: 'cfb',
-      label: 'CFB',
+      value: 'ncaaf',
+      label: 'NCAAF',
     },
     {
       value: 'mlb',
