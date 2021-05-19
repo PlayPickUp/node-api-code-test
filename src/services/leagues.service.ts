@@ -56,7 +56,7 @@ export const getLeagues = (): Leagues => {
       label: 'Wrestling',
     },
     {
-      value: 'horse-racing',
+      value: 'horse_racing',
       label: 'Horse Racing',
     },
     {
