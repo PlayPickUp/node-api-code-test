@@ -55,6 +55,14 @@ export const getLeagues = (): Leagues => {
       value: 'wrestling',
       label: 'Wrestling',
     },
+    {
+      value: 'horse-racing',
+      label: 'Horse Racing',
+    },
+    {
+      value: 'olympics',
+      label: 'Olympics',
+    },
   ];
   return leagues;
 };
