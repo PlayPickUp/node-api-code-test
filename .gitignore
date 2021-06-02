@@ -6,5 +6,5 @@ error_log
 dist
 build
 .env
-
+.vscode
 .idea
