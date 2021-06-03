@@ -12,8 +12,9 @@ import { purchasePrizeForFan } from './fans.service';
 import moment from 'moment';
 import axios from 'axios';
 
-const KASPER_URL = process.env.KASPER_URL;
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
+const KASPER_PROVIDER = process.env.KASPER_URL || '';
+const KASPER_URL = process.env[KASPER_PROVIDER];
 
 export const listAllPrizes = async (): Promise<Prize[]> => {
   const prizes = await knex.select('*').from('prizes').orderBy('id', 'desc');
