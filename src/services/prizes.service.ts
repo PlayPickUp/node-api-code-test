@@ -1,5 +1,4 @@
 import knex from '../util/db';
-import sgMail from '@sendgrid/mail';
 import {
   CreatePrizeCodesRequest,
   CreatePrizeCodesResponse,
@@ -10,10 +9,12 @@ import {
   RedemptionDateDTO,
 } from '../models/prizes.model';
 import { purchasePrizeForFan } from './fans.service';
-import { Fan } from '../models/fans.model';
 import moment from 'moment';
+import axios from 'axios';
 
-const SENDGRID_API_KEY = process.env.SENDGRID_API_KEY || '';
+const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
+const KASPER_PROVIDER = process.env.KASPER_URL || '';
+const KASPER_URL = process.env[KASPER_PROVIDER];
 
 export const listAllPrizes = async (): Promise<Prize[]> => {
   const prizes = await knex.select('*').from('prizes').orderBy('id', 'desc');
@@ -143,7 +144,27 @@ export const redeemPrizeCodeForFan = async (
     await unassignPrizeCode(prizeCode);
     throw e;
   }
-  await sendPrizeCodeEmail(prizeCode, redeemPrizeCodeRequest.fan);
+
+  await axios({
+    method: 'post',
+    url: `${KASPER_URL}/emails/prize-redemption`,
+    data: {
+      prize_code_id: prizeCode.code,
+      fan_email: redeemPrizeCodeRequest.fan.email,
+      fan_name: redeemPrizeCodeRequest.fan.first_name,
+    },
+    params: {
+      token: ADMIN_TOKEN,
+    },
+  })
+    .then(() => {
+      console.log('Sent prize email to Kasper!');
+      return;
+    })
+    .catch((error) => {
+      console.error('Failed to send prize email to Kasper! ', error);
+      throw error;
+    });
 };
 
 const validateFanIsEligibleForPrize = async (
@@ -262,44 +283,4 @@ const getRedeemablePrizeCode = async (prizeId: number): Promise<PrizeCode> => {
       if (!data) throw new Error('No Redeemable prize code available');
       return data;
     });
-};
-
-const sendPrizeCodeEmail = async (prizeCode: PrizeCode, fan: Fan) => {
-  // TODO https://app.zenhub.com/workspaces/pickup-5ee6cbe39ef1ca001fefe69b/issues/playpickup/pickup-rails/856
-  // replace this call to metafloor with our own barcode service
-  const imageSource =
-    'https://bwipjs-api.metafloor.com/?bcid=code128&text=' + prizeCode.code;
-  const emailBody = `
-<div>
-    <span>Hey ${fan.username}!</span>
-    <br/>
-    <span>You've successfully redeemed your points for a Free Game of Bowling at Bowlero!</span>
-    <br/>
-    <span>Please visit <a href="https://www.bowlero.com/locations?radius=25">https://www.bowlero.com/locations?radius=25</a> 
-    to find your nearest Bowlero Corp location, print out or pull up the voucher's bar code on your smart phone and 
-    redeem upon arrival.</span>
-    <br/>
-    <span>Restriction: Voucher may not be redeemed on Saturdays.</span>
-    <br/>
-    <span>Thanks for Playing PickUp!</span>
-    <br/>
-    <div style="background: white">
-    <img src=${imageSource} />
-    </div>
-    <br/>
-</div>`;
-  try {
-    sgMail.setApiKey(SENDGRID_API_KEY);
-    const msg = {
-      to: fan.email,
-      from: 'marketplace@playpickup.com',
-      subject: 'Your PickUp Marketplace Prize From Bowlero Is Here!',
-      html: emailBody,
-    };
-    await sgMail.send(msg);
-  } catch (e) {
-    console.error('Unable to send Prize Code email: ' + e.message);
-    throw e;
-  }
-  return;
 };

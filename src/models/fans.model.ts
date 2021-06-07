@@ -4,7 +4,6 @@ export interface Fan {
   first_name?: string;
   last_name?: string;
   username: string;
-  hometown?: string;
   email?: string;
   points: number;
 }
