@@ -969,6 +969,13 @@
     "@parcel/utils" "^1.11.0"
     physical-cpu-count "^2.0.0"
 
+"@playpickup/server-events@^1.1.3":
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/@playpickup/server-events/-/server-events-1.1.3.tgz#4d6b3f1039ab902f534208103f0f58542e4d0a46"
+  integrity sha512-Zo3NHyTH0psIlo3DOV5jdtpmqZQToaUQFR1JDT/jghlIz4x+nooVWpuOPF264cdqSblvO0IMEHGwEiJGVjn6aA==
+  dependencies:
+    mixpanel "^0.13.0"
+
 "@sendgrid/client@^7.4.0":
   version "7.4.2"
   resolved "https://registry.npmjs.org/@sendgrid/client/-/client-7.4.2.tgz"
@@ -4034,7 +4041,7 @@ https-browserify@^1.0.0:
   resolved "https://registry.npmjs.org/https-browserify/-/https-browserify-1.0.0.tgz"
   integrity sha1-7AbBDgo0wPL68Zn3/X/Hj//QPHM=
 
-https-proxy-agent@^5.0.0:
+https-proxy-agent@5.0.0, https-proxy-agent@^5.0.0:
   version "5.0.0"
   resolved "https://registry.npmjs.org/https-proxy-agent/-/https-proxy-agent-5.0.0.tgz"
   integrity sha512-EkYm5BcKUGiduxzSt3Eppko+PiNWNEpa4ySk9vTC6wDsQJW9rHSa+UhGNJoRYp7bz6Ht1eaRIa6QaJqO5rCFbA==
@@ -5010,6 +5017,13 @@ mixin-deep@^1.2.0:
   dependencies:
     for-in "^1.0.2"
     is-extendable "^1.0.1"
+
+mixpanel@^0.13.0:
+  version "0.13.0"
+  resolved "https://registry.yarnpkg.com/mixpanel/-/mixpanel-0.13.0.tgz#699bf510d9ba013c75edcf979ff1e24085fde9d2"
+  integrity sha512-YOWmpr/o4+zJ8LPjuLUkWLc2ImFeIkX6hF1t62Wlvq6loC6e8EK8qieYO4gYPTPxxtjAryl7xmIvf/7qnPwjrQ==
+  dependencies:
+    https-proxy-agent "5.0.0"
 
 mkdirp@^0.5.1, mkdirp@~0.5.1:
   version "0.5.5"

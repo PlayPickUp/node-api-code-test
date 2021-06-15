@@ -25,6 +25,7 @@
     "heroku-postbuild": "yarn build:express && yarn build:workers"
   },
   "dependencies": {
+    "@playpickup/server-events": "^1.1.3",
     "@sendgrid/mail": "^7.4.0",
     "@sentry/node": "^6.2.0",
     "@sentry/tracing": "^6.2.0",

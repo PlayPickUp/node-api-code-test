@@ -23,6 +23,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
+
+      - name: Use NPM Token with organization read access
+        uses: dkershner6/use-npm-token-action@v1
+        with:
+          token: ${{ secrets.NPM_PICKUP_TOKEN_READ_ONLY }}
+
       - run: npm install yarn -g
       - run: yarn install
       - run: yarn test
