@@ -1,9 +1,12 @@
 import axios from 'axios';
+import { PUServerEvents } from '@playpickup/server-events';
 
 import { pickupErrorHandler } from '../errorHandler';
 
-const { KASPER_URL, ADMIN_TOKEN } = process.env;
+const { KASPER_URL, ADMIN_TOKEN, MIXPANEL_TOKEN, NODE_ENV } = process.env;
 const KASPER = process.env[KASPER_URL || ''];
+
+const tracker = new PUServerEvents(MIXPANEL_TOKEN || '', NODE_ENV || '');
 
 export const generateFeaturedImg = async (
   post_id: string | number,
@@ -26,8 +29,18 @@ export const generateFeaturedImg = async (
     if (!response || !response.data) {
       throw new Error('Could not get response from Kasper!');
     }
+    tracker.captureEvent('featured_img_sent_to_kasper', null, {
+      post_id,
+      url,
+      data: response.data,
+    });
     return response.data;
   } catch (err) {
+    tracker.captureEvent('featured_img_sent_to_kasper_error', null, {
+      post_id,
+      url,
+      err,
+    });
     pickupErrorHandler(err);
   }
 };

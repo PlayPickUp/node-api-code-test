@@ -6,6 +6,7 @@ import favicon from 'serve-favicon';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import path from 'path';
+import robots from 'express-robots-txt';
 
 import ForbiddenException from './exceptions/forbidden.exception';
 import Strategy from 'passport-auth-token';
@@ -31,6 +32,9 @@ const { NODE_ENV } = process.env;
 
 const app = express();
 const port = process.env.PORT || 3001;
+
+// Must be FIRST! - blocks all bots
+app.use(robots({ UserAgent: '*', Disallow: '/' }));
 
 Sentry.init({
   dsn,

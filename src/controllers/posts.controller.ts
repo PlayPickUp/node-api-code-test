@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import split from 'lodash/split';
 import axios from 'axios';
+import { PUServerEvents } from '@playpickup/server-events';
 
 import { delBucketPostRelation } from '../services/buckets.service';
 import {
@@ -14,7 +15,9 @@ import { makeSlug } from '../helpers/posts/slug.helper';
 import { handleLeagueValue } from '../helpers/posts/post.helper';
 import { Post } from '../models/posts.model';
 
-const { PRERENDER_TOKEN, NODE_ENV } = process.env;
+const { PRERENDER_TOKEN, NODE_ENV, MIXPANEL_TOKEN } = process.env;
+
+const tracker = new PUServerEvents(MIXPANEL_TOKEN || '', NODE_ENV || '');
 
 export const posts = async (req: Request, res: Response): Promise<Response> => {
   const { query } = req;
@@ -49,8 +52,10 @@ export const posts = async (req: Request, res: Response): Promise<Response> => {
       return postWithSlug;
     });
 
+    tracker.captureEvent('posts_queried', null, { ...query, posts });
     return res.json(transformedPosts);
   } catch (err) {
+    tracker.captureEvent('posts_queried_error', null, { ...query, err });
     console.error(err);
     return res.sendStatus(500).send(err);
   }
@@ -80,15 +85,21 @@ export const create = async (
           .then((response) => {
             if (response.status !== 200)
               throw new Error('Prerender threw a non 200 status code');
+            tracker.captureEvent('post_prerender_request', null, {
+              ...response,
+              ...post,
+            });
           })
           .catch((err) => console.error(err));
       } catch (err) {
+        tracker.captureEvent('post_prerender_error', null, { err, ...post });
         console.error(err);
       }
     }
-
+    tracker.captureEvent('post_created', null, { ...body });
     return res.json({ message: 'Created' });
   } catch (err) {
+    tracker.captureEvent('post_creation_error', null, { ...body, err });
     console.error(err);
     return res.sendStatus(500).send(err);
   }
@@ -102,8 +113,10 @@ export const update = async (
   try {
     const post = await updatePost(body).catch((err) => new Error(err));
     if (!post) throw new Error('Could not update post!');
+    tracker.captureEvent('post_updated', null, { ...body });
     return res.json({ message: 'Updated' });
   } catch (err) {
+    tracker.captureEvent('post_updated_error', null, { ...body, err });
     console.error(err);
     return res.sendStatus(500).send(err);
   }
@@ -118,8 +131,10 @@ export const patch = async (req: Request, res: Response): Promise<Response> => {
     if (!post) {
       throw new Error('Could not patch post!');
     }
+    tracker.captureEvent('post_patched', null, { ...body });
     return res.json({ message: 'Updated' });
   } catch (err) {
+    tracker.captureEvent('post_patched_error', null, { ...body, err });
     console.error(err);
     return res.sendStatus(500).send(err);
   }
@@ -152,6 +167,9 @@ export const del = async (req: Request, res: Response): Promise<Response> => {
       if (!response) failedDeletes.push(postId);
     }
     if (failedDeletes.length > 0) {
+      tracker.captureEvent('post_failed_deletions', null, {
+        posts: failedDeletes,
+      });
       return res.json({
         message:
           'Delete completed with errors: the following Posts were not deleted: ' +
@@ -159,8 +177,10 @@ export const del = async (req: Request, res: Response): Promise<Response> => {
       });
     }
 
+    tracker.captureEvent('post_deleted', null, { id: idPayload });
     return res.json({ message: 'Deleted' });
   } catch (err) {
+    tracker.captureEvent('post_deleted_error', null, { id: idPayload, err });
     console.error(err);
     return res.sendStatus(500).send(err);
   }

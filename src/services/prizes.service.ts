@@ -149,9 +149,8 @@ export const redeemPrizeCodeForFan = async (
     method: 'post',
     url: `${KASPER_URL}/emails/prize-redemption`,
     data: {
-      prize_code_id: prizeCode.code,
-      fan_email: redeemPrizeCodeRequest.fan.email,
-      fan_name: redeemPrizeCodeRequest.fan.first_name,
+      prize: prizeCode,
+      fan: redeemPrizeCodeRequest.fan,
     },
     params: {
       token: ADMIN_TOKEN,

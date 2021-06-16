@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { PUServerEvents } from '@playpickup/server-events';
 
 import {
   createNewPrize,
@@ -11,14 +12,19 @@ import { CreatePrizeCodesResponse } from '../models/prizes.model';
 import { fanIdMatchesToken, updateProfile } from '../services/fans.service';
 import { Fan } from '../models/fans.model';
 
+const { NODE_ENV, MIXPANEL_TOKEN } = process.env;
+const tracker = new PUServerEvents(MIXPANEL_TOKEN || '', NODE_ENV || '');
+
 export const getPrizes = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
   try {
     const prizes = await listAllPrizes();
+    tracker.captureEvent('prizes_queried', null, { prizes });
     return res.json(prizes);
   } catch (err) {
+    tracker.captureEvent('prizes_queried_error', null, { err });
     console.error(err);
     return res.sendStatus(500).send(err);
   }
@@ -39,12 +45,25 @@ export const getRedemptionDates = async (
     const dates = await getRedemptionDatesForFan(fanId);
     if (!dates || dates.length < 1)
       throw new Error('Could not get redemption dates for fan');
+    tracker.captureEvent('fan_redemption_date_checked', fanId, {
+      ...query,
+      dates,
+    });
     return res.json(dates);
   } catch (err) {
+    tracker.captureEvent(
+      'fan_redemption_date_checked_error',
+      (query && query.fanId && Number(query.fanId)) || null,
+      {
+        ...query,
+        err,
+      }
+    );
     console.error(err);
     return res.sendStatus(500).send(err);
   }
 };
+
 export const createPrize = async (
   req: Request,
   res: Response
@@ -53,8 +72,10 @@ export const createPrize = async (
   try {
     const prize = await createNewPrize(body);
     if (!prize) throw new Error('Could not create prize!');
+    tracker.captureEvent('prize_created', null, { ...prize });
     return res.json({ message: 'Created' });
   } catch (err) {
+    tracker.captureEvent('prize_created_error', null, { ...body, err });
     console.error(err);
     return res.sendStatus(500).send(err);
   }
@@ -68,8 +89,10 @@ export const addPrizeCodes = async (
   try {
     const response: CreatePrizeCodesResponse = await createNewPrizeCodes(body);
     if (!response) throw new Error('Could not create prize codes!');
+    tracker.captureEvent('prize_code_added', null, { ...body, ...response });
     return res.json(response);
   } catch (err) {
+    tracker.captureEvent('prize_code_added_error', null, { ...body, err });
     console.error(err);
     return res.sendStatus(500).send(err);
   }
@@ -101,8 +124,21 @@ export const redeemPrizeCode = async (
       await updateProfile(strippedFanPartial);
     }
     await redeemPrizeCodeForFan(body);
+    tracker.captureEvent(
+      'prize_redeemed',
+      (strippedFanPartial && strippedFanPartial.id) || null,
+      {
+        ...strippedFanPartial,
+        ...body,
+      }
+    );
     return res.json({ message: 'Prize Code Redeemed!' });
   } catch (err) {
+    tracker.captureEvent(
+      'prize_redeemed_error',
+      (body && body.fan && body.fan.id) || null,
+      { ...body, err }
+    );
     console.error(err);
     return res.status(500).json({ message: err.message });
   }
