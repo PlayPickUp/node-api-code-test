@@ -11,7 +11,7 @@ import {
   patchPost,
   updatePost,
 } from '../services/posts.service';
-import { makeSlug } from '../helpers/posts/slug.helper';
+import { makeSlug } from '@playpickup/sluggy';
 import { handleLeagueValue } from '../helpers/posts/post.helper';
 import { Post } from '../models/posts.model';
 
