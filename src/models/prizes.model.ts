@@ -10,6 +10,7 @@ export interface Prize {
   image: string;
   external_url: string;
   points_cost: number;
+  redemption_type: string;
 }
 
 export enum PrizeStatus {
