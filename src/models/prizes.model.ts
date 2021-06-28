@@ -38,6 +38,7 @@ export interface CreatePrizeRequest {
 
 export interface CreatePrizeCodesRequest {
   codes: string[];
+  pins?: string[];
   prize_id: number;
   expiration_date: Date | null;
 }
