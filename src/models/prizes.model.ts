@@ -10,6 +10,7 @@ export interface Prize {
   image: string;
   external_url: string;
   points_cost: number;
+  redemption_type: string;
 }
 
 export enum PrizeStatus {
@@ -37,6 +38,7 @@ export interface CreatePrizeRequest {
 
 export interface CreatePrizeCodesRequest {
   codes: string[];
+  pins?: string[];
   prize_id: number;
   expiration_date: Date | null;
 }

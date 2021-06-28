@@ -97,24 +97,46 @@ export const createNewPrizeCodes = async (
     created: 0,
     failed: [],
   };
+
   await Promise.all(
-    createPrizeCodesReq.codes.map(async (code) => {
-      try {
-        await knex('prize_codes')
-          .insert({
-            code,
-            expiration_date: createPrizeCodesReq.expiration_date,
-            prize_id: createPrizeCodesReq.prize_id,
-            created_at: moment().toISOString(),
-            updated_at: moment().toISOString(),
-          })
-          .returning(['id', 'code'])
-          .catch((err: string) => {
-            throw new Error(err);
-          });
-        response.created++;
-      } catch (e) {
-        response.failed.push(code);
+    createPrizeCodesReq.codes.map(async (code, index) => {
+      if (createPrizeCodesReq.pins) {
+        try {
+          await knex('prize_codes')
+            .insert({
+              code,
+              pin: createPrizeCodesReq.pins[index],
+              expiration_date: createPrizeCodesReq.expiration_date,
+              prize_id: createPrizeCodesReq.prize_id,
+              created_at: moment().toISOString(),
+              updated_at: moment().toISOString(),
+            })
+            .returning(['id', 'code', 'pin'])
+            .catch((err: string) => {
+              throw new Error(err);
+            });
+          response.created++;
+        } catch (e) {
+          response.failed.push(code);
+        }
+      } else {
+        try {
+          await knex('prize_codes')
+            .insert({
+              code,
+              expiration_date: createPrizeCodesReq.expiration_date,
+              prize_id: createPrizeCodesReq.prize_id,
+              created_at: moment().toISOString(),
+              updated_at: moment().toISOString(),
+            })
+            .returning(['id', 'code'])
+            .catch((err: string) => {
+              throw new Error(err);
+            });
+          response.created++;
+        } catch (e) {
+          response.failed.push(code);
+        }
       }
     })
   );
@@ -129,15 +151,15 @@ export const redeemPrizeCodeForFan = async (
     redeemPrizeCodeRequest.prize_id
   );
   await assignCodeToFan(prizeCode, redeemPrizeCodeRequest.fan.id);
-  const prizeCost: number = await getPrizeById(
-    redeemPrizeCodeRequest.prize_id
-  ).then((data: Prize) => {
-    return data.points_cost;
-  });
+  const prize: Prize = await getPrizeById(redeemPrizeCodeRequest.prize_id).then(
+    (data: Prize) => {
+      return data;
+    }
+  );
   try {
     await purchasePrizeForFan({
       fan_id: redeemPrizeCodeRequest.fan.id,
-      points_cost: prizeCost,
+      points_cost: prize.points_cost,
     });
   } catch (e) {
     console.error('failed to purchase prize code for fan');
@@ -149,7 +171,8 @@ export const redeemPrizeCodeForFan = async (
     method: 'post',
     url: `${KASPER_URL}/emails/prize-redemption`,
     data: {
-      prize: prizeCode,
+      prize,
+      prizeCode,
       fan: redeemPrizeCodeRequest.fan,
     },
     params: {
