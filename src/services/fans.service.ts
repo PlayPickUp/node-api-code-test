@@ -6,11 +6,11 @@ export const purchasePrizeForFan = async (
 ): Promise<void> => {
   try {
     const pointsBalance: number = await knex('fans')
-      .select('points')
+      .select('marketplace_pts')
       .where('id', '=', request.fan_id)
       .first()
       .then((data: Partial<Fan>) => {
-        return data.points;
+        return data.marketplace_pts;
       });
     const newBalance = pointsBalance - request.points_cost;
     if (newBalance < 0) {
@@ -19,7 +19,7 @@ export const purchasePrizeForFan = async (
 
     await knex('fans')
       .where('id', '=', request.fan_id)
-      .update({ points: newBalance });
+      .update({ marketplace_pts: newBalance });
   } catch (err) {
     console.error(err);
     throw err;
