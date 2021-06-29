@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.14.0
+  version: 0.19.0
   title: PickUp Node API
   description: PickUp's Node API
 paths:
