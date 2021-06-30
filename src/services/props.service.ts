@@ -1,22 +1,39 @@
+import head from 'lodash/head';
+
 import knex from '../util/db';
 import { epochNow, epochNowPlus48 } from '../util/epochConverts';
 import { Prop } from '../models/prop.model';
+import { pickupErrorHandler } from '../helpers/errorHandler';
+import { getPicks } from './picks.service';
 
 // Get props
 export const getProps = async (
   limit: string | undefined = '75',
   offset: string | undefined = '0',
-  id: string
+  id: string,
+  picks = 'true'
 ): Promise<Prop[] | Prop | void> => {
+  const showPicks = picks.toLowerCase() === 'true' ? true : false;
   if (id) {
     try {
-      const prop: Prop = await knex.select().from('props').where({ id });
+      const prop: Prop[] = await knex.select().from('props').where({ id });
       if (!prop) {
         throw new Error('Could not get props');
       }
-      return prop;
+
+      if (!showPicks) {
+        return prop;
+      } else {
+        const pickedProp = head(prop);
+        if (!pickedProp) {
+          throw new Error('Could not get singular prop to fetch picks');
+        }
+        const picks = await getPicks(0, 25, pickedProp?.id);
+        const payload = [{ ...pickedProp, picks }];
+        return payload;
+      }
     } catch (err) {
-      console.error(err);
+      pickupErrorHandler(err);
     }
   } else {
     try {
@@ -29,9 +46,20 @@ export const getProps = async (
       if (!props) {
         throw new Error('Could not get props');
       }
-      return props;
+
+      if (!showPicks) {
+        return props;
+      } else {
+        const payload = await Promise.all(
+          props.map(async (prop) => {
+            const picks = await getPicks(0, 25, prop.id);
+            return { ...prop, picks };
+          })
+        );
+        return payload;
+      }
     } catch (err) {
-      console.error(err);
+      pickupErrorHandler(err);
     }
   }
 };
@@ -53,6 +81,6 @@ export const getClosingProps = async (): Promise<Prop[] | void> => {
 
     return props;
   } catch (err) {
-    console.error(err);
+    pickupErrorHandler(err);
   }
 };

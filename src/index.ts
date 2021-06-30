@@ -27,6 +27,7 @@ import eventsRouter from './routes/events.routes';
 import bucketsRouter from './routes/buckets.routes';
 import prizesRouter from './routes/prizes.routes';
 import statsRouter from './routes/stats.routes';
+import { picksRouter } from './routes/picks.routes';
 
 const { NODE_ENV } = process.env;
 
@@ -109,6 +110,7 @@ app.use('/v1', eventsRouter);
 app.use('/v1', bucketsRouter);
 app.use('/v1', prizesRouter);
 app.use('/v1', statsRouter);
+app.use('/v1', picksRouter);
 
 // health check
 app.get('/health', cors(publicCorsConfig), (req: Request, res: Response) =>
