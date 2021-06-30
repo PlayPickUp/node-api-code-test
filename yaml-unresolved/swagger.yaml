@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.19.0
+  version: 0.20.0
   title: PickUp Node API
   description: PickUp's Node API
 paths:
@@ -27,10 +27,16 @@ paths:
           name: token
           type: string
           required: true
+          description: Publisher token
+        - in: query
+          name: picks
+          type: string
+          default: true
+          description: Set to `false` to query props without picks attached
 
       responses:
         200:
-          description: Successfully returned a list of props - THIS OUTPUT WILL CHANGE AND IS NOT SOLIDIFIED
+          description: Successfully returned a list of props
           schema:
             type: array
             items:
@@ -39,23 +45,104 @@ paths:
                 id:
                   type: integer
                   example: 3829
+                created_at:
+                  type: string
+                  example: '2020-07-20 05:12:57.528962'
+                updated_at:
+                  type: string
+                  example: '2020-07-20 05:12:57.528962'
                 proposition:
                   type: string
-                  example: "Fowler's Batting Average for 2021"
-                iframe_html:
+                  example: 'Where do the 76ers finish in the East?'
+                league:
                   type: string
-                  example: '<iframe src="https://app.playpickup.com//widgets/props/4768" style="width: 352px; height: 504px; margin-bottom: 0; border: none" referrerpolicy="unsafe-url" sandbox="allow-popups allow-scripts allow-same-origin allow-forms" width="352px" height="504px" resizable></iframe>'
+                  example: "nba"
+                user_id:
+                  type: integer
+                  example: 2
+                  description: User id of the admin who created the prop
+                fan_picks_count:
+                  type: integer
+                  example: 2395
+                  description: Number of fan picks on a prop, may be deprecated in the future
+                utm_term_tag:
+                  type: string
+                  example: aaron-rodgers
+                  description: 'Player term tag, can be null'
+                utm_content_tag: 
+                  type: string
+                  example: nba-future-yesno-2
+                  description: UTM Encoding for the prop which includes teams, league, and more
+                close_time:
+                  type: string
+                  example: '2021-03-24T00:00:00.000Z'
+                  description: Prop close time when not attached to an event (I think...)
+                close_time_id:
+                  type: string
+                  example: a4664806ba3e0ecca7432e3e
+                  description: Sidekick ID for Rails, may be deprecated in the near future
+                slug:
+                  type: string
+                  example: 'where-do-the-76ers-finish-in-the-east'
+                  description: Prop slug
+                featured_leaderboard_id:
+                  type: integer
+                  example: 67
+                  description: Featured leaderboard this prop is associated with
+                event_id:
+                  type: integer
+                  example: 74
+                  description: Event the prop is assigned to, if the event close time is sooner than the prop close time, the event close time wins
+                publish_at:
+                  type: string
+                  example: '2021-03-24T00:00:00.000Z'
+                  description: Future forward publish time, to allow publishing in the future
+                close_at:
+                  type: string
+                  example: '2021-03-24T00:00:00.000Z'
+                  description: Event close time if applicable - can also be null
+                status:
+                  type: string
+                  example: 'pending'
+                  description: Prop status, a new introduction to the API, signifies the status of the entire prop
                 picks:
                   type: array
                   items:
                     type: object
                     properties:
+                      prop_id:
+                        type: integer
+                        example: 8044
+                      pick_id:
+                        type: integer
+                        
                       id:
-                        type: number
-                        example: 10531
+                        type: integer
+                        example: 2323
                       title:
                         type: string
-                        example: "Dexter Fowler's final batting average for 2021 will be over .270"
+                        example: 'Celtics beat the Bucks on 3/24'
+                      created_at:
+                        type: string
+                        example: '2021-03-20 01:08:25.530295'
+                      updated_at:
+                        type: string
+                        example: '2021-03-20 01:08:25.530295'
+                      state:
+                        type: string
+                        example: 'pending'
+                      fan_picks_count:
+                        type: number
+                        example: 51
+                      user_id:
+                        type: number
+                        example: 2
+                      graded_at:
+                        type: string
+                        example: '2021-03-13 18:13:58.140031'
+                      display_title:
+                        type: string
+                        example: Celtics
 
         403:
           description: Permission Denied
@@ -847,7 +934,7 @@ paths:
       parameters:
         - in: query
           name: token
-          description: Admin token
+          description: Publisher token
           type: string
           required: true
         - in: query
@@ -920,10 +1007,7 @@ paths:
     
 
 # Added by API Auto Mocking Plugin
-# host: api.playpickup.com
-# basePath: /v1
+host: api.playpickup.com
+basePath: /v1
 schemes:
   - https
-# Added by API Auto Mocking Plugin
-host: virtserver.swaggerhub.com
-basePath: /stoutatpickup/pickup-node-api/0.1.0
