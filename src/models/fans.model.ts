@@ -6,6 +6,7 @@ export interface Fan {
   username: string;
   email?: string;
   points: number;
+  marketplace_pts: number;
 }
 
 export interface PrizePurchaseRequest {

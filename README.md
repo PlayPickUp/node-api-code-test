@@ -1,33 +1,26 @@
-# pickup-node-api
+# 🏛️ pickup-node-api
 
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
 ![Build](https://github.com/PlayPickUp/pickup-node-api/workflows/Build/badge.svg?branch=master)
+[![Release](https://github.com/PlayPickUp/pickup-node-api/actions/workflows/release.yml/badge.svg)](https://github.com/PlayPickUp/pickup-node-api/actions/workflows/release.yml)
 
-## Props
+## 📑 **_DOCUMENTATION_**
 
-### GET `/api/v1/props`
+All documentation for this API can be found on [Swaggerhub](https://app.swaggerhub.com/apis-docs/PlayPickup/pickup-node-api)
 
-`getProps()` retrieves most recent 75 props
+## 💻 **_DEVELOPING LOCALLY_**
 
-## Params: `limit` (default 75), `offset` (default 0), `id` (default null)
+Machine Pre-reqs:
 
-```sh
-# Default - 75 props, no offset
-/api/v1/props
+- Node v14.x
+- yarn v1.x
 
-# 10 props, with offset of 10
-/api/v1/props?limit=10&offset=10
+ENV File:
 
-# Single Prop (id: 2006)
-/api/v1/props?id=2006
-```
+See the [.env.example](https://github.com/PlayPickUp/pickup-node-api/blob/develop/.env.example) for a start `.env` file. For tokens, reach out to a Leader or co-worker.
 
-### GET `/api/v1/props/closing`
+### 🤔 **_So you added new endpoints or features, what next_**?
 
-`getClosingProps()` Returns props that are closing within the next 48 hours
+‼️ DOCUMENT THEM! ‼️
 
-## Params: none
-
-```sh
-# Default - returns all props closing within 48 hours
-/api/v1/props/closing
-```
+Ensure when planning or creating a new endpoint or modifying an existing one to update the documentation in [Swaggerhub](https://app.swaggerhub.com/organizations/PlayPickup)

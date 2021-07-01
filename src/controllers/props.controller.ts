@@ -13,8 +13,9 @@ export const props = async (req: Request, res: Response): Promise<Response> => {
     const limit = req.query.limit as string;
     const offset = req.query.offset as string;
     const id = req.query.id as string;
+    const picks = req.query.picks as string;
 
-    const props = await getProps(limit, offset, id);
+    const props = await getProps(limit, offset, id, picks);
     tracker.captureEvent('props_queried', null, { ...req.query, props });
     return res.json(props);
   } else {
