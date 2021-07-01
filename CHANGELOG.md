@@ -1,3 +1,11 @@
+# [0.20.0](https://github.com/PlayPickUp/pickup-node-api/compare/v0.19.0...v0.20.0) (2021-07-01)
+
+
+### Features
+
+* **marketplace:**  :recycle:  update fan marketplace_pts column deduction instead of points ([#135](https://github.com/PlayPickUp/pickup-node-api/issues/135)) ([24bac59](https://github.com/PlayPickUp/pickup-node-api/commit/24bac5952fc620db91d3fc9a655a1ecff9dd872f))
+* **picks-props-api:** Create Picks Endpoints, Add picks to props ([#137](https://github.com/PlayPickUp/pickup-node-api/issues/137)) ([0567d54](https://github.com/PlayPickUp/pickup-node-api/commit/0567d54786b975b4edba9025bfb3448743b4e706))
+
 # [0.19.0](https://github.com/PlayPickUp/pickup-node-api/compare/v0.18.0...v0.19.0) (2021-06-28)
 
 ### Features
