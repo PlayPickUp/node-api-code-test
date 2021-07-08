@@ -1,3 +1,10 @@
+## [0.20.1](https://github.com/PlayPickUp/pickup-node-api/compare/v0.20.0...v0.20.1) (2021-07-08)
+
+
+### Bug Fixes
+
+* **marketplace:** updated redeem function to unassign code and and not deduct points during errors ([#142](https://github.com/PlayPickUp/pickup-node-api/issues/142)) ([2d6da6f](https://github.com/PlayPickUp/pickup-node-api/commit/2d6da6fe76b229c6074628df395568f56fba73eb))
+
 # [0.20.0](https://github.com/PlayPickUp/pickup-node-api/compare/v0.19.0...v0.20.0) (2021-07-01)
 
 
