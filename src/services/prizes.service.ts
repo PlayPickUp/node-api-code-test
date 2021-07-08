@@ -157,36 +157,33 @@ export const redeemPrizeCodeForFan = async (
     }
   );
   try {
-    await purchasePrizeForFan({
-      fan_id: redeemPrizeCodeRequest.fan.id,
-      points_cost: prize.points_cost,
-    });
+    await axios({
+      method: 'post',
+      url: `${KASPER_URL}/emails/prize-redemption`,
+      data: {
+        prize,
+        prizeCode,
+        fan: redeemPrizeCodeRequest.fan,
+      },
+      params: {
+        token: ADMIN_TOKEN,
+      },
+    })
+      .then(async () => {
+        await purchasePrizeForFan({
+          fan_id: redeemPrizeCodeRequest.fan.id,
+          points_cost: prize.points_cost,
+        });
+      })
+      .catch((error) => {
+        console.error('Failed to send prize email to Kasper! ', error);
+        throw error;
+      });
   } catch (e) {
     console.error('failed to purchase prize code for fan');
     await unassignPrizeCode(prizeCode);
     throw e;
   }
-
-  await axios({
-    method: 'post',
-    url: `${KASPER_URL}/emails/prize-redemption`,
-    data: {
-      prize,
-      prizeCode,
-      fan: redeemPrizeCodeRequest.fan,
-    },
-    params: {
-      token: ADMIN_TOKEN,
-    },
-  })
-    .then(() => {
-      console.log('Sent prize email to Kasper!');
-      return;
-    })
-    .catch((error) => {
-      console.error('Failed to send prize email to Kasper! ', error);
-      throw error;
-    });
 };
 
 const validateFanIsEligibleForPrize = async (
