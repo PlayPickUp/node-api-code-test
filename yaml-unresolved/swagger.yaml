@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.20.0
+  version: 0.21.0
   title: PickUp Node API
   description: PickUp's Node API
 paths:
@@ -973,6 +973,37 @@ paths:
                 graded_at:
                   type: string
                   example: '2021-03-13 18:13:58.140031'
+  /fans/pick:
+    post:
+      description: Creates an unverified fan pick on the specified pick
+      parameters:
+        - in: query
+          name: token
+          description: Publisher Token
+          type: string
+        - in: body
+          name: body
+          description: Creates a fan pick
+          required: true
+          schema:
+            type: object
+            required:
+              - pick_id
+            properties:
+              pick_id:
+                type: integer
+                example: 7632
+      responses: 
+        201:
+          description: Created unverified Fan Pick - Returns the Fan Pick ID for claiming
+          schema: 
+            type: array
+            items:
+              type: object
+              properties:
+                id: 
+                  type: string
+                  example: 76483
                   
   /stats/posts-by-day:
     get: 
