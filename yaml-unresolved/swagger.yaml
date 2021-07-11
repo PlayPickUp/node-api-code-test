@@ -989,10 +989,14 @@ paths:
             type: object
             required:
               - pick_id
+              - prop_id
             properties:
               pick_id:
                 type: integer
                 example: 7632
+              prop_id:
+                type: integer
+                example: 6420
       responses: 
         201:
           description: Created unverified Fan Pick - Returns the Fan Pick ID for claiming
