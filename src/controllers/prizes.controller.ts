@@ -107,8 +107,8 @@ export const redeemPrizeCode = async (
     const strippedFanPartial: Partial<Fan> = {
       id: body.fan.id,
       persistence_token: body.fan.persistence_token,
-      first_name: body.fan.firstname,
-      last_name: body.fan.lastname,
+      first_name: body.fan.first_name,
+      last_name: body.fan.last_name,
       email: body.fan.email,
     };
     const validToken = await fanIdMatchesToken(strippedFanPartial);
