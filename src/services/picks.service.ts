@@ -3,6 +3,8 @@ import head from 'lodash/head';
 import { pickupErrorHandler } from '../helpers/errorHandler';
 import { Pick } from '../models/picks.model';
 import omit from 'lodash/omit';
+import reduce from 'lodash/reduce';
+import merge from 'lodash/merge';
 
 export const getPickStateByProp = async (
   prop_id: string | number
@@ -61,9 +63,28 @@ export const getPicks = async (
           throw err;
         });
 
-      const transformedPicks = picks.map((pick: Pick) =>
-        omit(pick, ['prop_id', 'pick_id'])
+      const totalPicks = reduce(
+        picks.map((pick: Pick) =>
+          pick.fan_picks_count === null ? 1 : pick.fan_picks_count
+        ),
+        (sum, n) => sum + n,
+        0
       );
+
+      const calculatePopularity = (pick: Pick, totalPicks: number): number => {
+        const count = pick.fan_picks_count === null ? 1 : pick.fan_picks_count;
+        const percentage = (Number(count) / totalPicks) * 100;
+        return percentage;
+      };
+
+      const transformedPicks = picks.map((pick: Pick) => {
+        const pickPopularity = calculatePopularity(pick, totalPicks);
+        const updatedPick = merge(pick, { pick_popularity: pickPopularity });
+        const result = omit(updatedPick, ['prop_id', 'pick_id']);
+
+        return result;
+      });
+
       return transformedPicks;
     }
   } catch (err) {
