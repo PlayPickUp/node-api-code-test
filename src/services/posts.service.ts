@@ -20,7 +20,8 @@ export interface GetPosts {
     article_url?: string | undefined,
     prop_id?: string | undefined,
     league?: string | undefined,
-    search?: string | undefined
+    search?: string | undefined,
+    publisher_id?: string | undefined
   ): Promise<Post[] | void>;
 }
 
@@ -38,13 +39,22 @@ export const getPosts: GetPosts = async (
   article_url,
   prop_id,
   league,
-  search
+  search,
+  publisher_id
 ) => {
   const posts: Post[] = knex
     .select('*')
     .from('posts')
     .where((builder: QueryBuilder) => {
-      const query = { limit, offset, id, article_url, prop_id, search };
+      const query = {
+        limit,
+        offset,
+        id,
+        article_url,
+        prop_id,
+        search,
+        publisher_id,
+      };
       const computedQuery: Record<string, string | number | undefined> = omitBy(
         query,
         (item) => {
