@@ -1,6 +1,6 @@
 swagger: '2.0'
 info:
-  version: 0.21.0
+  version: 0.22.0
   title: PickUp Node API
   description: PickUp's Node API
 paths:
@@ -698,6 +698,10 @@ paths:
           name: league
           type: string
           description: Returns league specific posts matching league name
+        - in: query
+          name: publisher_id
+          type: string
+          description: Returns posts from specific publisher
         - in: query
           name: prop_id
           type: integer
