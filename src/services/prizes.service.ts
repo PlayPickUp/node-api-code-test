@@ -5,6 +5,7 @@ import {
   CreatePrizeRequest,
   Prize,
   PrizeCode,
+  PrizeRedemption,
   RedeemPrizeCodesRequest,
   RedemptionDateDTO,
 } from '../models/prizes.model';
@@ -40,7 +41,6 @@ export const getRedemptionDatesForFan = async (
   fanId: number
 ): Promise<RedemptionDateDTO[]> => {
   try {
-    //TODO #863 Convert this whole method into a single DB query, or at least reduce it down from N+1 queries :(
     const prizeIds: Partial<Prize>[] = await knex('prizes').select('id');
 
     const redemptionDates: RedemptionDateDTO[] = await Promise.all(
@@ -236,7 +236,6 @@ const getNextRedemptionDate = async (
     return moment('2020-01-01').toDate(); // can redeem immediately; any past date is acceptable
   }
 
-  // return new Date(lastRedemption.getTime() + (prizePeriod*24*60*60*1000))
   return moment(lastRedemption).add(prizePeriod, 'days').toDate();
 };
 
@@ -244,13 +243,13 @@ const getLastRedemptionDate = async (
   fanId: number,
   prizeId: number
 ): Promise<Date | null> => {
-  return await knex('prize_codes')
+  return await knex('prize_redemptions')
     .select('redeemed_at')
     .where('fan_id', '=', fanId)
     .andWhere('prize_id', '=', prizeId)
     .orderBy('redeemed_at', 'desc')
     .limit(1)
-    .then((data: Partial<PrizeCode>[]) => {
+    .then((data: Partial<PrizeRedemption>[]) => {
       if (data.length < 1) {
         return null;
       }
@@ -263,12 +262,12 @@ const assignCodeToFan = async (
   fanId: number
 ): Promise<PrizeCode> => {
   const redeemDateString: string = new Date().toISOString();
-  return knex('prize_codes')
-    .where('id', '=', prizeCode.id)
-    .update({
+  return knex('prize_redemptions')
+    .insert({
       fan_id: fanId,
+      prize_code_id: prizeCode.id,
       redeemed_at: redeemDateString,
-      updated_at: redeemDateString,
+      prize_id: prizeCode.prize_id,
     })
     .then(async (data: PrizeCode) => {
       if (!data) throw new Error('Unable to assign PrizeCode to Fan');
@@ -277,13 +276,9 @@ const assignCodeToFan = async (
 };
 
 const unassignPrizeCode = async (prizeCode: PrizeCode): Promise<PrizeCode> => {
-  return await knex('prize_codes')
-    .where('id', '=', prizeCode.id)
-    .update({
-      fan_id: null,
-      redeemed_at: null,
-      updated_at: new Date().toISOString(),
-    })
+  return await knex('prize_redemptions')
+    .where('prize_code_id', '=', prizeCode.id)
+    .del()
     .then((data: PrizeCode) => {
       if (!data) throw new Error('Unable to un-assign PrizeCode');
       return data;
@@ -294,7 +289,11 @@ const getRedeemablePrizeCode = async (prizeId: number): Promise<PrizeCode> => {
   const ninetyDaysFromNow: Date = moment().add(90, 'days').toDate();
   return await knex('prize_codes')
     .select()
-    .whereNull('fan_id')
+    .whereNotExists(
+      knex('prize_redemptions')
+        .select()
+        .whereRaw('prize_codes.id = prize_redemptions.prize_code_id')
+    )
     .andWhere('prize_id', '=', prizeId)
     .andWhere('expiration_date', '>', ninetyDaysFromNow)
     .first()

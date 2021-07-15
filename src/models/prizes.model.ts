@@ -21,10 +21,19 @@ export enum PrizeStatus {
 export interface PrizeCode {
   id: number;
   prize_id: number;
-  fan_id?: number;
   code: string;
-  redeemed_at: Date | null;
+  pin: string | null;
   expiration_date: Date | null;
+  created_at: Date | null;
+  updated_at: Date | null;
+}
+
+export interface PrizeRedemption {
+  id: number;
+  fan_id: number;
+  prize_id: number;
+  prize_code_id: number;
+  redeemed_at: Date;
 }
 
 export interface CreatePrizeRequest {
