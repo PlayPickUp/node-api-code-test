@@ -994,13 +994,34 @@ paths:
             required:
               - pick_id
               - prop_id
+              - source_url
+              - publisher_id
+              - ip_address
             properties:
               pick_id:
                 type: integer
                 example: 7632
+                description: ID of the Pick being made
               prop_id:
                 type: integer
                 example: 6420
+                description: ID of the Prop the Pick is being made against
+              source_url:
+                type: string
+                example: https://borderfuelsports.com/nba-play-in-tournament-set-to-return-in-2021-22/
+                description: Source where pick was made
+              publisher_id:
+                type: integer
+                example: 2
+                description: Publisher's PickUp ID
+              ip_address:
+                type: string
+                example: 123.23.123.23
+                description: IP Address of the user making the pick
+              fan_id:
+                type: integer
+                example: 4665
+                description: ID of the Fan making the pick, can be null if they are not logged in/not verified yet
       responses: 
         201:
           description: Created unverified Fan Pick - Returns the Fan Pick ID for claiming
