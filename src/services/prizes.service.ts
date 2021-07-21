@@ -41,25 +41,47 @@ export const getRedemptionDatesForFan = async (
   fanId: number
 ): Promise<RedemptionDateDTO[]> => {
   try {
-    const prizeIds: Partial<Prize>[] = await knex('prizes').select('id');
+    const prizeRedemptions: PrizeRedemption[] = await knex
+      .select(
+        'prize_id',
+        'fan_id',
+        'prize_code_id',
+        'redeemed_at',
+        'min_days_between_redemptions'
+      )
+      .from(
+        knex('prize_redemptions')
+          .select()
+          .distinctOn('prize_id')
+          .where('fan_id', '=', fanId)
+          .orderByRaw('prize_id, redeemed_at DESC')
+          .as('pr')
+      )
+      .join('prizes', 'prizes.id', 'pr.prize_id')
+      .orderBy('redeemed_at', 'desc')
+      .then((data: PrizeRedemption[]) => {
+        return data;
+      })
+      .catch((err: Error) => {
+        console.error(err);
+      });
 
     const redemptionDates: RedemptionDateDTO[] = await Promise.all(
-      prizeIds.map(async (prizePartial) => {
-        if (prizePartial.id) {
-          return {
-            prizeId: prizePartial.id,
-            nextRedemption: await getNextRedemptionDate(
-              fanId,
-              prizePartial.id
-            ).then((data: Date) => {
-              return moment(data).toISOString();
-            }),
-          };
-        } else {
-          throw new Error('Got a prize from the Database with no ID.');
-        }
+      prizeRedemptions.map(async (redemption: PrizeRedemption) => {
+        return {
+          prizeId: redemption.prize_id.toString(),
+          nextRedemption: await getNextRedemptionDate(
+            fanId,
+            redemption.prize_id,
+            redemption.redeemed_at,
+            redemption.min_days_between_redemptions
+          ).then((data: Date) => {
+            return moment(data).toISOString();
+          }),
+        };
       })
     );
+
     return redemptionDates;
   } catch (err) {
     console.error("Couldn't get redemption dates for fan: " + fanId);
@@ -216,24 +238,30 @@ const validateFanIsEligibleForPrize = async (
 
 const getNextRedemptionDate = async (
   fanId: number,
-  prizeId: number
+  prizeId: number,
+  lastRedemption?: Date,
+  prizePeriod?: number
 ): Promise<Date> => {
-  const lastRedemption: Date | null = await getLastRedemptionDate(
-    fanId,
-    prizeId
-  );
   if (!lastRedemption) {
-    return moment('2020-01-01').toDate(); // can redeem immediately; any past date is acceptable
+    const lastRedemption: Date | null = await getLastRedemptionDate(
+      fanId,
+      prizeId
+    );
+    if (!lastRedemption) {
+      return moment('2020-01-01').toDate(); // can redeem immediately; any past date is acceptable
+    }
   }
 
-  const prizePeriod: number = await knex('prizes')
-    .where('id', '=', prizeId)
-    .first()
-    .then((data: Prize) => {
-      return data.min_days_between_redemptions;
-    });
-  if (!prizePeriod || prizePeriod < 1) {
-    return moment('2020-01-01').toDate(); // can redeem immediately; any past date is acceptable
+  if (!prizePeriod) {
+    const prizePeriod: number = await knex('prizes')
+      .where('id', '=', prizeId)
+      .first()
+      .then((data: Prize) => {
+        return data.min_days_between_redemptions;
+      });
+    if (!prizePeriod || prizePeriod < 1) {
+      return moment('2020-01-01').toDate(); // can redeem immediately; any past date is acceptable
+    }
   }
 
   return moment(lastRedemption).add(prizePeriod, 'days').toDate();
