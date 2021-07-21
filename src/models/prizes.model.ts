@@ -69,6 +69,14 @@ export interface RedeemPrizeCodesRequest {
 }
 
 export interface RedemptionDateDTO {
-  prizeId: number;
+  prizeId: string;
   nextRedemption: string;
+}
+
+export interface PrizeRedemption {
+  prize_id: number;
+  fan_id: number;
+  prize_code_id: number;
+  redeemed_at: Date;
+  min_days_between_redemptions: number;
 }

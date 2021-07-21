@@ -43,8 +43,6 @@ export const getRedemptionDates = async (
     }
     const fanId = Number(query.fan_id);
     const dates = await getRedemptionDatesForFan(fanId);
-    if (!dates || dates.length < 1)
-      throw new Error('Could not get redemption dates for fan');
     tracker.captureEvent('fan_redemption_date_checked', fanId, {
       ...query,
       dates,
