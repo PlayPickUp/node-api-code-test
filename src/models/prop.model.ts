@@ -1,7 +1,9 @@
+import { Pick } from './picks.model';
+
 export interface Prop {
   id: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at: Date | string;
+  updated_at: Date | string;
   league: string;
   user_id: number;
   fan_picks_count: number;
@@ -13,4 +15,5 @@ export interface Prop {
   slug: string;
   proposition: string;
   status: string;
+  picks: Pick[] | null;
 }

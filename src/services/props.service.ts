@@ -10,7 +10,7 @@ import { getPicks } from './picks.service';
 export const getProps = async (
   limit: string | undefined = '75',
   offset: string | undefined = '0',
-  id: string,
+  id: string | number,
   picks = 'true'
 ): Promise<Prop[] | Prop | void> => {
   const showPicks = picks.toLowerCase() === 'true' ? true : false;
