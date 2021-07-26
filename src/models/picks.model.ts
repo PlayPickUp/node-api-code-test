@@ -7,4 +7,5 @@ export interface Pick {
   fan_picks_count: string | number;
   user_id: string | number;
   graded_at: Date | null;
+  pick_popularity: number;
 }

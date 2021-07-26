@@ -50,7 +50,8 @@
     "pg": "^8.5.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "short-unique-id": "^4.3.3"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^5.0.1",

@@ -39,9 +39,8 @@ export const getPicks = async (
 ): Promise<Pick[] | null> => {
   try {
     if (!prop_id) {
-      const picks: Pick[] = await knex()
+      const picks: Pick[] = await knex('picks')
         .select()
-        .from('picks')
         .offset(offset)
         .limit(limit)
         .orderBy('created_at', 'desc')
