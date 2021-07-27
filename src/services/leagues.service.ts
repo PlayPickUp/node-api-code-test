@@ -16,20 +16,24 @@ export const getLeagues = (): Leagues => {
       label: 'NCAAF',
     },
     {
-      value: 'mlb',
-      label: 'MLB',
+      value: 'olympics',
+      label: 'Olympics',
     },
     {
-      value: 'mma',
-      label: 'MMA',
+      value: 'nfl',
+      label: 'NFL',
     },
     {
       value: 'nba',
       label: 'NBA',
     },
     {
-      value: 'nfl',
-      label: 'NFL',
+      value: 'mma',
+      label: 'MMA',
+    },
+    {
+      value: 'mlb',
+      label: 'MLB',
     },
     {
       value: 'nhl',
@@ -59,11 +63,8 @@ export const getLeagues = (): Leagues => {
       value: 'horse-racing',
       label: 'Horse Racing',
     },
-    {
-      value: 'olympics',
-      label: 'Olympics',
-    },
   ];
+
   return leagues;
 };
 
