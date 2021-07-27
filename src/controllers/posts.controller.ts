@@ -98,7 +98,14 @@ export const create = async (
         console.error(err);
       }
     }
-    tracker.captureEvent('post_created', null, { ...body });
+    tracker.captureEvent('post_created', null, {
+      article_title: body.headline,
+      publisher_name: body.publisher_name,
+      publisher_id: body.publisher_id || null,
+      prop_id: body.prop_id,
+      league_name: body.league,
+      ...body,
+    });
     return res.json({ message: 'Created' });
   } catch (err) {
     tracker.captureEvent('post_creation_error', null, { ...body, err });
