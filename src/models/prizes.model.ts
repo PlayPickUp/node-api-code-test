@@ -47,14 +47,16 @@ export interface CreatePrizeRequest {
 
 export interface CreatePrizeCodesRequest {
   codes: string[];
-  pins?: string[];
+  pins: string[];
   prize_id: number;
   expiration_date: Date | null;
+  same_length: boolean;
 }
 
 export interface CreatePrizeCodesResponse {
   created: number;
   failed: string[];
+  message?: string;
 }
 
 export interface RedeemPrizeCodesResponse {
