@@ -3,7 +3,6 @@ import { Fan } from './fans.model';
 export interface Prize {
   id: number;
   title: string;
-  status: PrizeStatus;
   min_days_between_redemptions?: number;
   short_desc: string;
   long_desc: string;
@@ -11,11 +10,15 @@ export interface Prize {
   external_url: string;
   points_cost: number;
   redemption_type: string;
+  status: PrizeStatus;
+  next_redemption?: string;
 }
 
 export enum PrizeStatus {
-  Available = 'Available Now',
-  ComingSoon = 'Coming Soon',
+  Login = 'Available Now',
+  AlreadyRedeemed = 'Already Redeemed',
+  InsufficientPoints = 'Not Enough Points',
+  Ready = 'Ready to Redeem',
 }
 
 export interface PrizeCode {
@@ -70,7 +73,7 @@ export interface RedeemPrizeCodesRequest {
   update_profile: boolean;
 }
 
-export interface RedemptionDateDTO {
+export interface RedemptionDate {
   prizeId: string;
   nextRedemption: string;
 }

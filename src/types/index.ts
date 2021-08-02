@@ -1,3 +1,4 @@
+import { ParsedQs } from 'qs';
 // non model types go here!
 
 export interface CreateFanPick {
@@ -29,3 +30,5 @@ export interface IPInfoPayload {
   timezone: string;
   asn: IPInfoASN;
 }
+
+export type QueryParam = string | string[] | ParsedQs | ParsedQs[] | undefined;
