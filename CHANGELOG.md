@@ -1,3 +1,23 @@
+# [0.22.0](https://github.com/PlayPickUp/pickup-node-api/compare/v0.21.0...v0.22.0) (2021-08-03)
+
+
+### Bug Fixes
+
+* **marketplace:** updated fan variables to accept name change in profile ([#150](https://github.com/PlayPickUp/pickup-node-api/issues/150)) ([19988ac](https://github.com/PlayPickUp/pickup-node-api/commit/19988acb3d61d8e2c8834f96418ed0b85ca6556a))
+
+
+### Features
+
+* **Home Base:** Reorder Labels[#962](https://github.com/PlayPickUp/pickup-node-api/issues/962) ([#160](https://github.com/PlayPickUp/pickup-node-api/issues/160)) ([e9c44d8](https://github.com/PlayPickUp/pickup-node-api/commit/e9c44d8b483fa2a50d510463fc6cd28027c0f494))
+* **marketplace:** added conditional for prize code length ([#161](https://github.com/PlayPickUp/pickup-node-api/issues/161)) ([55460b6](https://github.com/PlayPickUp/pickup-node-api/commit/55460b682e2f77493c935fbad4922c14b59cc263))
+* **marketplace:** condensed calls to db in redemption dates ([#159](https://github.com/PlayPickUp/pickup-node-api/issues/159)) ([e2fb914](https://github.com/PlayPickUp/pickup-node-api/commit/e2fb9148c2b0be3a2e577f00dd8928534c5155bc))
+* **marketplace:** refactored prizes endpoint to handle all logic ([#166](https://github.com/PlayPickUp/pickup-node-api/issues/166)) ([0bdf272](https://github.com/PlayPickUp/pickup-node-api/commit/0bdf27279d7e5ff423005e36aac331d65c478aa2))
+* **marketplace:** updated redemption logic to post new code to prize redemptions table ([#155](https://github.com/PlayPickUp/pickup-node-api/issues/155)) ([a10def8](https://github.com/PlayPickUp/pickup-node-api/commit/a10def8694a63c3d4e7174a0c6d760e5c6dcf0e4))
+* **mixpanel:** expand mixpanel for contractor ([#162](https://github.com/PlayPickUp/pickup-node-api/issues/162)) ([2f1dcbf](https://github.com/PlayPickUp/pickup-node-api/commit/2f1dcbfd3378e1f0b161568b42635812b65293ca))
+* **picks-api:** Add Picks API to get and create fan picks ([#149](https://github.com/PlayPickUp/pickup-node-api/issues/149)) ([0b6c4d8](https://github.com/PlayPickUp/pickup-node-api/commit/0b6c4d8c2518ea69d898e1e2fc9799e1f8cd1bbc))
+* **posts:** add ability to return posts by publisher ([#152](https://github.com/PlayPickUp/pickup-node-api/issues/152)) ([07c8831](https://github.com/PlayPickUp/pickup-node-api/commit/07c8831f6a4f3c1a497c0f065938bd5af33c5dea))
+* **PropPicks:** Add pick popularities to Picks in Props responses ([#151](https://github.com/PlayPickUp/pickup-node-api/issues/151)) ([5557d53](https://github.com/PlayPickUp/pickup-node-api/commit/5557d530de6556e224524c8e768ff55da152661e))
+
 # [0.21.0](https://github.com/PlayPickUp/pickup-node-api/compare/v0.20.1...v0.21.0) (2021-07-27)
 
 
