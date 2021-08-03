@@ -1063,9 +1063,88 @@ paths:
               message:
                 type: string
                 example: Bad Request
+                
+  /prizes:
+    get:
+      description: Get all prizes from the database and its redemption status with a fan id
+      parameters:
+        - in: query
+          name: token
+          description: Publisher token
+          type: string
+          required: true
+        - in: query
+          name: fanId
+          description: Database id assigned to the fan (pass this when you want to update the prize redemption status)
+          type: integer
+          required: false
+      responses:
+        200:
+          description: OK
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: string
+                  example: '1'
+                title:
+                  type: string
+                  example: 'Game of bowling for 2 people'
+                short_desc:
+                  type: string
+                  example: 'In-person - $30 value'
+                long_desc:
+                  type: string
+                  example: 'Enjoy a free game of bowling and shoe rental for 2 people at any of our participating centers around the country'
+                external_url:
+                  type: string
+                  example: 'www.bowlero.com'
+                image_url:
+                  type: string
+                  example: 'https://playpickup.s3.us-east-2.amazonaws.com/away-team/kasper/homebase/prize-images/bowlero_lanes.jpg'
+                points_cost:
+                  type: string
+                  example: '250'
+                created_at:
+                  type: string
+                  example: '2021-04-21T21:06:45.982Z'
+                updated_at:
+                  type: string
+                  example: '2021-04-21T21:06:45.982Z'
+                status:
+                  type: string
+                  example: 'Available Now'
+                min_days_between_redemptions:
+                  type: string
+                  example: '30'
+                redemption_type:
+                  type: string
+                  example: 'barcode'
+                banner_image_url:
+                  type: string
+                  example: 'https://playpickup.s3.us-east-2.amazonaws.com/marketplace/logos/pickup-bowlero.png'
+                prize_name:
+                  type: string
+                  example: 'Bowlero'
+        400:
+          description: Bad Request
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Bad Request'
+        403:
+          description: Internal Server Error
+          schema:
+            type: object
+            properties:
+              message:
+                type: string
+                example: 'Internal Server Error'
     
-    
-
 # Added by API Auto Mocking Plugin
 host: api.playpickup.com
 basePath: /v1

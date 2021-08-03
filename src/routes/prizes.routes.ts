@@ -15,6 +15,9 @@ const prizesRouter = express.Router();
 prizesRouter.get(
   '/prizes',
   cors(publicCorsConfig),
+  passport.authenticate('publishertoken', {
+    session: false,
+  }),
   async (req: Request, res: Response) => await getPrizes(req, res)
 );
 

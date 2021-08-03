@@ -7,25 +7,102 @@ import {
   PrizeCode,
   PrizeRedemption,
   RedeemPrizeCodesRequest,
-  RedemptionDateDTO,
+  RedemptionDate,
+  PrizeStatus,
 } from '../models/prizes.model';
 import { purchasePrizeForFan } from './fans.service';
 import moment from 'moment';
 import axios from 'axios';
+import { Fan } from '../models/fans.model';
+import { QueryParam } from '../types';
+import { pickupErrorHandler } from '../helpers/errorHandler';
+import head from 'lodash/head';
 
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN;
 const KASPER_PROVIDER = process.env.KASPER_URL || '';
 const KASPER_URL = process.env[KASPER_PROVIDER];
 
-export const listAllPrizes = async (): Promise<Prize[]> => {
-  const prizes = await knex.select('*').from('prizes').orderBy('id', 'desc');
+export const listAllPrizes = async (
+  fanId: QueryParam
+): Promise<Prize[] | void> => {
+  const prizes = await knex.select('*').from('prizes');
   if (!prizes) {
     throw new Error('Could not retrieve prizes from API!');
   }
   if (prizes.name === 'Error') {
     throw new Error(prizes.message);
   }
-  return prizes;
+
+  if (!fanId) {
+    return prizes;
+  }
+  try {
+    const fanIdNum = Number(fanId);
+    const pointsBalance: number = await knex('fans')
+      .select('marketplace_pts')
+      .where('id', fanId)
+      .first()
+      .then((data: Partial<Fan>) => {
+        return data.marketplace_pts;
+      })
+      .catch(() => {
+        throw new Error('Cannot find fan or marketplace points!');
+      });
+    const redemptionDates: RedemptionDate[] = await getRedemptionDatesForFan(
+      fanIdNum
+    );
+    const updatedPrizes: Promise<Prize[]> = Promise.all(
+      prizes.map(async (prize: Prize) => {
+        if (pointsBalance < Number(prize.points_cost)) {
+          return {
+            ...prize,
+            status: PrizeStatus.InsufficientPoints,
+          };
+        }
+        const nextRedemption: string | void = await getNextRedemptionMessage(
+          prize,
+          redemptionDates
+        );
+        if (nextRedemption) {
+          return {
+            ...prize,
+            status: PrizeStatus.AlreadyRedeemed,
+            next_redemption: nextRedemption,
+          };
+        }
+        if (pointsBalance >= Number(prize.points_cost)) {
+          return { ...prize, status: PrizeStatus.Ready };
+        }
+      })
+    );
+    return updatedPrizes;
+  } catch (err) {
+    pickupErrorHandler(err);
+  }
+};
+
+export const getNextRedemptionMessage = async (
+  prize: Prize,
+  redemptions: RedemptionDate[]
+): Promise<string | void> => {
+  try {
+    for (const redemption of redemptions) {
+      const redemptionDate = new Date(redemption.nextRedemption);
+      const today = new Date(Date.now());
+      if (
+        Number(redemption.prizeId) === Number(prize.id) &&
+        redemptionDate > today
+      ) {
+        return `This prize is limited to 1 redemption every ${
+          prize.min_days_between_redemptions
+        } days, next available on ${moment
+          .utc(redemption.nextRedemption)
+          .format('MMMM DD, YYYY')}`;
+      }
+    }
+  } catch (err) {
+    pickupErrorHandler(err);
+  }
 };
 
 export const getPrizeById = async (prizeId: number): Promise<Prize> => {
@@ -39,7 +116,7 @@ export const getPrizeById = async (prizeId: number): Promise<Prize> => {
 
 export const getRedemptionDatesForFan = async (
   fanId: number
-): Promise<RedemptionDateDTO[]> => {
+): Promise<RedemptionDate[]> => {
   try {
     const prizeRedemptions: PrizeRedemption[] = await knex
       .select(
@@ -66,7 +143,7 @@ export const getRedemptionDatesForFan = async (
         console.error(err);
       });
 
-    const redemptionDates: RedemptionDateDTO[] = await Promise.all(
+    const redemptionDates: RedemptionDate[] = await Promise.all(
       prizeRedemptions.map(async (redemption: PrizeRedemption) => {
         return {
           prizeId: redemption.prize_id.toString(),
@@ -120,45 +197,43 @@ export const createNewPrizeCodes = async (
     failed: [],
   };
 
+  const firstCode = head(createPrizeCodesReq.codes);
+  const firstPin = head(createPrizeCodesReq.pins);
+
   await Promise.all(
-    createPrizeCodesReq.codes.map(async (code, index) => {
-      if (createPrizeCodesReq.pins) {
-        try {
-          await knex('prize_codes')
-            .insert({
-              code,
-              pin: createPrizeCodesReq.pins[index],
-              expiration_date: createPrizeCodesReq.expiration_date,
-              prize_id: createPrizeCodesReq.prize_id,
-              created_at: moment().toISOString(),
-              updated_at: moment().toISOString(),
-            })
-            .returning(['id', 'code', 'pin'])
-            .catch((err: string) => {
-              throw new Error(err);
-            });
-          response.created++;
-        } catch (e) {
-          response.failed.push(code);
+    createPrizeCodesReq.codes.map(async (code, i) => {
+      try {
+        if (createPrizeCodesReq.same_length && firstCode) {
+          if (code.length !== firstCode.length) {
+            throw new Error('One or more codes is not the correct length!');
+          }
+          if (firstPin) {
+            if (createPrizeCodesReq.pins[i].length !== firstPin.length) {
+              throw new Error('One or more pins is not the correct length!');
+            }
+          }
         }
-      } else {
-        try {
-          await knex('prize_codes')
-            .insert({
-              code,
-              expiration_date: createPrizeCodesReq.expiration_date,
-              prize_id: createPrizeCodesReq.prize_id,
-              created_at: moment().toISOString(),
-              updated_at: moment().toISOString(),
-            })
-            .returning(['id', 'code'])
-            .catch((err: string) => {
-              throw new Error(err);
-            });
-          response.created++;
-        } catch (e) {
-          response.failed.push(code);
-        }
+        const pins = firstPin ? createPrizeCodesReq.pins[i] : null;
+        await knex('prize_codes')
+          .insert({
+            code,
+            pin: pins,
+            expiration_date: createPrizeCodesReq.expiration_date,
+            prize_id: createPrizeCodesReq.prize_id,
+            created_at: moment().toISOString(),
+            updated_at: moment().toISOString(),
+          })
+          .returning(['id', 'code', 'pin'])
+          .catch((err: string) => {
+            throw new Error(err);
+          });
+        response.created++;
+      } catch (e) {
+        response.failed.push(code);
+        createPrizeCodesReq.pins
+          ? response.failed.push(createPrizeCodesReq.pins[i])
+          : null;
+        response.message = e.toString();
       }
     })
   );

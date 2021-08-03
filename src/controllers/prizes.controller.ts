@@ -20,7 +20,8 @@ export const getPrizes = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const prizes = await listAllPrizes();
+    const fanId = req.query.fan_id;
+    const prizes = await listAllPrizes(fanId);
     tracker.captureEvent('prizes_queried', null, { prizes });
     return res.json(prizes);
   } catch (err) {
